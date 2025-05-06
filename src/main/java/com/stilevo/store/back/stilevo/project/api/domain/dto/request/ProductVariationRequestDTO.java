@@ -16,7 +16,7 @@ public class ProductVariationRequestDTO {
 
     private Integer deposit;
 
-    private String imagemUrl;
+    private String imageUrl;
 
     private Long productId;
 }
