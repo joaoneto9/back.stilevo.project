@@ -1,5 +1,6 @@
 package com.stilevo.store.back.stilevo.project.api.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stilevo.store.back.stilevo.project.api.domain.enums.Size;
 import jakarta.persistence.*;
 import lombok.*;
