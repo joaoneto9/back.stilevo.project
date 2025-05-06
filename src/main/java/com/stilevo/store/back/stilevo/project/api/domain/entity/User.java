@@ -4,6 +4,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Ender
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
@@ -12,6 +13,8 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@Table(name = "tb_user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,6 +25,7 @@ public class User implements Serializable {
 
     private String username;
 
+    @EqualsAndHashCode.Include
     private String email;
 
     private String password;
@@ -29,7 +33,6 @@ public class User implements Serializable {
     @Embedded
     private Endereco endereco;
 
-    @OneToOne
-    @MapsId
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 }
