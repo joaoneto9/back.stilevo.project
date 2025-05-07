@@ -1,11 +1,15 @@
 package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.controller.exception.NotFoundException;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
+import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +32,21 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new NotFoundException("user nao encontrado"));
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username);
+    public ResponseEntity<?> save(UserRequestDTO userRequestDTO, UserMapper userMapper) {
+        if (loadUserByUsername(userRequestDTO.getEmail()) != null) // existe usuario com esse Email
+            return ResponseEntity.badRequest().build();
+
+        String encryptPassword = new BCryptPasswordEncoder().encode(userRequestDTO.getPassword()); // cryptografa a senha
+        userRequestDTO.setPassword(encryptPassword); // set da senha cryptografada
+
+        userMapper.toEntity(userRequestDTO); // mapeia para entidade
+
+        return ResponseEntity.ok().build();
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email);
+    }
+
 }
