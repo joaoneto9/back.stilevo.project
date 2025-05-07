@@ -1,13 +1,14 @@
 package com.stilevo.store.back.stilevo.project.api.controller;
 
+import com.stilevo.store.back.stilevo.project.api.domain.dto.authentication.AuthenticationUserDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import com.stilevo.store.back.stilevo.project.api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,11 +38,9 @@ public class UserController {
     }
 
     @PostMapping(value = "/POST/register")
-    public ResponseEntity<?> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         return userService.save(userRequestDTO, userMapper);
     }
-
-
 
 
 }
