@@ -6,6 +6,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
 import com.stilevo.store.back.stilevo.project.api.domain.enums.Size;
+import com.stilevo.store.back.stilevo.project.api.domain.enums.UserRole;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.ProductRespository;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.ProductVariationRepository;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
@@ -48,8 +49,8 @@ public class TestConfig implements CommandLineRunner {
         Endereco endereco2 = new Endereco("Avenida Brasil", "456", "CidadeZ", "EstadoW", "98765-432");
 
         // Criando instâncias de User sem carrinho (Cart)
-        User user1 = new User(null, "joao_silva", "joao.silva@email.com", "senha123", endereco1, null);
-        User user2 = new User(null, "maria_oliveira", "maria.oliveira@email.com", "senha456", endereco2, null);
+        User user1 = new User(null, "joao_silva", "joao.silva@email.com", "senha123", endereco1, UserRole.USER, null);
+        User user2 = new User(null, "maria_oliveira", "maria.oliveira@email.com", "senha456", endereco2, UserRole.USER, null);
 
         Cart cart1 = new Cart();
         cart1.setUser(user1);
