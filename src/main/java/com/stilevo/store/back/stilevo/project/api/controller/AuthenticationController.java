@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "auth")
+@RequestMapping(value = "/auth")
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;

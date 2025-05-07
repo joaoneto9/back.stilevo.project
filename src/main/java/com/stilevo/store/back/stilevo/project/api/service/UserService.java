@@ -2,9 +2,11 @@ package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.controller.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
 import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,16 +34,19 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new NotFoundException("user nao encontrado"));
     }
 
-    public ResponseEntity<?> save(UserRequestDTO userRequestDTO, UserMapper userMapper) {
+    @Transactional
+    public ResponseEntity<UserResponseDTO> save(UserRequestDTO userRequestDTO, UserMapper userMapper) {
         if (loadUserByUsername(userRequestDTO.getEmail()) != null) // existe usuario com esse Email
             return ResponseEntity.badRequest().build();
 
         String encryptPassword = new BCryptPasswordEncoder().encode(userRequestDTO.getPassword()); // cryptografa a senha
         userRequestDTO.setPassword(encryptPassword); // set da senha cryptografada
 
-        userMapper.toEntity(userRequestDTO); // mapeia para entidade
+        User user = userMapper.toEntity(userRequestDTO); // mapeia para entidade
 
-        return ResponseEntity.ok().build();
+        userRepository.save(user);
+
+        return ResponseEntity.ok(userMapper.toResponse(user));
     }
 
     @Override

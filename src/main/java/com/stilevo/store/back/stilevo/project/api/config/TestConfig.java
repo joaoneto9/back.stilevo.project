@@ -14,6 +14,7 @@ import com.stilevo.store.back.stilevo.project.api.mapper.ProductVariationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -59,6 +60,9 @@ public class TestConfig implements CommandLineRunner {
         Cart cart2 = new Cart();
         cart2.setUser(user2);
         user2.setCart(cart2);
+
+        user1.setPassword(new BCryptPasswordEncoder().encode(user1.getPassword()));
+        user2.setPassword(new BCryptPasswordEncoder().encode(user2.getPassword()));
 
         userRepository.saveAll(List.of(user1, user2));
     }
