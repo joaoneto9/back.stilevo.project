@@ -5,11 +5,9 @@ import com.stilevo.store.back.stilevo.project.api.domain.dto.response.ProductRes
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Product;
 import com.stilevo.store.back.stilevo.project.api.mapper.ProductMapper;
 import com.stilevo.store.back.stilevo.project.api.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,5 +34,11 @@ public class ProductController {
     @GetMapping(value = "GET/{id}")
     public ResponseEntity<ProductResponseDTO> findById( @PathVariable Long id) {
         return ResponseEntity.ok(productMapper.toResponse(productService.findById(id)));
+    }
+
+    @PostMapping(value = "POST/save")
+    public ResponseEntity<ProductResponseDTO> save(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
+        return ResponseEntity.ok(productService.save(productRequestDTO, productMapper));
+
     }
 }
