@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
 
         User user = userMapper.toEntity(userRequestDTO); // mapeia para entidade
 
-        userRepository.save(user);
+        userRepository.save(user); // salva no banco
 
         return ResponseEntity.ok(userMapper.toResponse(user));
     }

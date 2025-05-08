@@ -1,4 +1,4 @@
-package com.stilevo.store.back.stilevo.project.infra.security;
+package com.stilevo.store.back.stilevo.project.api.infra.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +12,17 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+
+    private final SecurityFilter securityFilter;
+
+    public SecurityConfiguration(SecurityFilter securityFilter) {
+        this.securityFilter = securityFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws  Exception{
@@ -24,10 +31,11 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // determina a politica de sessao
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers(HttpMethod.POST, "/api/users/POST/register").permitAll() // permite que todos podem registar usuario("apenas teste")
-                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll() // permite que todos podem logar
-//                                .requestMatchers(HttpMethod.POST, "/product/save").hasRole("ADMIN") // isso quer dizer que apensas os usuarios com role 'admin' estao autorizados para dar um POST com o endpoint '/product/save'
+                                .requestMatchers(HttpMethod.POST, "/api/users/POST/login").permitAll() // permite que todos podem logar
+                                .requestMatchers(HttpMethod.POST, "/product/save").hasRole("ADMIN") // isso quer dizer que apensas os usuarios com role 'admin' estao autorizados para dar um POST com o endpoint '/product/save'
                                 .anyRequest().authenticated() // isso quer dizer que qualquer outra requisicao que for feita precisa de autenticacao
-                        )
+                )
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // adiciona um filtro antes da verificaco
                 .build(); // cria
     }
 
