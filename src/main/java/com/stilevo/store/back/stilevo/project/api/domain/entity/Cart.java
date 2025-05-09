@@ -47,4 +47,17 @@ public class Cart implements Serializable {
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
+
+    public void addProduct(ProductVariation productVariation) {
+        for (CartItem cartItem : cartItems) {
+            if (cartItem.getProductVariation().equals(productVariation)) {
+                cartItem.addQuantity();
+                return;
+            }
+        }
+        CartItem newCartItem = new CartItem();
+        newCartItem.setCart(this);
+        newCartItem.setProductVariation(productVariation);
+        cartItems.add(newCartItem);
+    }
 }
