@@ -3,6 +3,8 @@ package com.stilevo.store.back.stilevo.project.api.domain.entity;
 import com.stilevo.store.back.stilevo.project.api.domain.enums.Size;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
@@ -33,6 +35,7 @@ public class ProductVariation implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 
     @Override

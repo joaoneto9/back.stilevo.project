@@ -39,6 +39,5 @@ public class ProductController {
     @PostMapping(value = "POST/save")
     public ResponseEntity<ProductResponseDTO> save(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
         return ResponseEntity.ok(productService.save(productRequestDTO, productMapper));
-
     }
 }

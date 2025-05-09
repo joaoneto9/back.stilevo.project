@@ -7,7 +7,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserRespon
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import com.stilevo.store.back.stilevo.project.api.service.UserService;
-import com.stilevo.store.back.stilevo.project.api.infra.security.TokenService;
+import com.stilevo.store.back.stilevo.project.api.config.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

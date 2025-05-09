@@ -1,4 +1,4 @@
-package com.stilevo.store.back.stilevo.project.api.infra.security;
+package com.stilevo.store.back.stilevo.project.api.config.security;
 
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
 import jakarta.servlet.FilterChain;
