@@ -1,4 +1,4 @@
-package com.stilevo.store.back.stilevo.project.api.infra.security;
+package com.stilevo.store.back.stilevo.project.api.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
