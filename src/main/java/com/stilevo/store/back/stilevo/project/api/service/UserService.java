@@ -1,12 +1,14 @@
 package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.controller.exception.NotFoundException;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.ProductVariationRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
 import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -54,4 +56,11 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+//    public User updateProduct(Long id, ProductVariationRequestDTO productVariationRequestDTO) {
+//        User user = findById(id);
+//
+//        user.addProductVariation(productVariationRequestDTO);
+//
+//
+//    }
 }

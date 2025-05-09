@@ -33,7 +33,7 @@ public class CartItem implements Serializable { // tabela intermediaria
     @EqualsAndHashCode.Include
     private ProductVariation productVariation;
 
-    private int quantity;
+    private int quantity = 1; // comeca com um
 
     @Override
     public final boolean equals(Object o) {
@@ -50,4 +50,9 @@ public class CartItem implements Serializable { // tabela intermediaria
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
+
+    public void addQuantity() {
+        quantity++;
+    }
+
 }

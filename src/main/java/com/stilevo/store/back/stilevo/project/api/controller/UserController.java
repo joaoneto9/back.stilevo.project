@@ -1,6 +1,7 @@
 package com.stilevo.store.back.stilevo.project.api.controller;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.authentication.AuthenticationUserDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.ProductVariationRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.LoginResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/GET/{id}")
-    public ResponseEntity<UserResponseDTO> findById( @PathVariable Long id ) {
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userMapper.toResponse(userService.findById(id)));
     }
 
@@ -60,6 +61,16 @@ public class UserController {
         String token = tokenService.generateToken((User) auth.getPrincipal()); // gera o token
         return ResponseEntity.ok(new LoginResponseDTO(token)); // quando logar, recebe o token
     }
+
+//    @PutMapping(value = "UPDATE/add/product/{id}")
+//    public ResponseEntity<UserResponseDTO> addProduct(
+//            @PathVariable Long id,
+//            @RequestBody @Valid ProductVariationRequestDTO productVariationRequestDTO
+//    ) {
+//        return ResponseEntity.ok(userMapper.toResponse(userService.updateProduct(id, productVariationRequestDTO)));
+//    }
+
+
 
 
 }
