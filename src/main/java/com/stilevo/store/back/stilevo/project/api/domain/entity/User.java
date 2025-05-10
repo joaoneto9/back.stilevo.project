@@ -96,7 +96,4 @@ public class User implements Serializable, UserDetails {
         return true;
     }
 
-    public void addProductVariation(ProductVariation productVariation) {
-        cart.addProduct(productVariation);
-    }
 }

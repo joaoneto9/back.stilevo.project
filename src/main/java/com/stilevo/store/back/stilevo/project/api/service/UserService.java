@@ -1,11 +1,13 @@
 package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.controller.exception.NotFoundException;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.request.ProductVariationRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AddToCartRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
+import com.stilevo.store.back.stilevo.project.api.mapper.ProductVariationMapper;
 import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -22,9 +24,13 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final ProductVariationService productVariationService;
+    private final ProductVariationMapper productVariationMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ProductVariationService productVariationService, ProductVariationMapper productVariationMapper) {
         this.userRepository = userRepository;
+        this.productVariationService = productVariationService;
+        this.productVariationMapper = productVariationMapper;
     }
 
     public List<User> findAll() {
@@ -55,12 +61,4 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email);
     }
-
-//    public User updateProduct(Long id, ProductVariationRequestDTO productVariationRequestDTO) {
-//        User user = findById(id);
-//
-//        user.addProductVariation(productVariationRequestDTO);
-//
-//
-//    }
 }
