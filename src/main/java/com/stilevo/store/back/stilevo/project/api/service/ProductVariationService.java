@@ -9,7 +9,6 @@ import com.stilevo.store.back.stilevo.project.api.domain.repository.ProductRespo
 import com.stilevo.store.back.stilevo.project.api.domain.repository.ProductVariationRepository;
 import com.stilevo.store.back.stilevo.project.api.mapper.ProductVariationMapper;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +19,11 @@ public class ProductVariationService {
 
     private final ProductVariationRepository productVariationRepository;
 
-    private final ProductRespository productRespository;
+    private final ProductService productService;
 
-    public ProductVariationService(ProductVariationRepository productVariationRepository, ProductRespository productRespository) {
+    public ProductVariationService(ProductVariationRepository productVariationRepository, ProductService productService) {
         this.productVariationRepository = productVariationRepository;
-        this.productRespository = productRespository;
+        this.productService = productService;
     }
 
     public List<ProductVariation> findAll() {
@@ -38,14 +37,11 @@ public class ProductVariationService {
 
     @Transactional
     public ProductVariationResponseDTO save(ProductVariationRequestDTO productVariationRequestDTO, ProductVariationMapper mapper) {
-        Optional<Product> product = productRespository.findById(productVariationRequestDTO.getProductId());
-
-        if (product.isEmpty())
-            throw new NotFoundException("produto nao existe, passe um id valido"); // se passa o id do produto errado, lanca excessao
+        Product product = productService.findById(productVariationRequestDTO.getProductId()); // ja lanca essa excessao no service do Product Service
 
         ProductVariation productVariation = mapper.toEntity(productVariationRequestDTO); // transforma em entidade
 
-        productVariation.setProduct(product.get()); //set do produto
+        productVariation.setProduct(product); // set do produto
 
         return mapper.toResponse(productVariationRepository.save(productVariation)); // salva no banco
     }
@@ -58,8 +54,6 @@ public class ProductVariationService {
         productVariationRepository.delete(productVariation);
 
         return productVariation;
-
-
     }
 
     @Transactional
@@ -75,4 +69,5 @@ public class ProductVariationService {
 
         return productVariationRepository.save(productVariation);
     }
+
 }
