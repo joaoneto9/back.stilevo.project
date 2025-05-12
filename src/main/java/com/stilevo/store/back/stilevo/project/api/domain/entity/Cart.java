@@ -48,16 +48,51 @@ public class Cart implements Serializable {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
-    public void addProduct(ProductVariation productVariation) {
+    public CartItem addProduct(ProductVariation productVariation) {
         for (CartItem cartItem : cartItems) {
             if (cartItem.getProductVariation().equals(productVariation)) {
                 cartItem.addQuantity();
-                return;
+                return cartItem;
             }
         }
+
         CartItem newCartItem = new CartItem();
         newCartItem.setCart(this);
         newCartItem.setProductVariation(productVariation);
         cartItems.add(newCartItem);
+        newCartItem.setPosicao(cartItems.size());
+        return newCartItem;
+    }
+
+    public CartItem removeProduct(int posicao) {
+        if (posicao > cartItems.size() || posicao < 0)
+            return null;
+
+        return cartItems.remove(posicao - 1);
+    }
+
+    public CartItem decreaseProduct(int posicao) {
+        if (posicao > cartItems.size() || posicao < 0)
+            return null;
+
+        CartItem cartItem = cartItems.get(posicao - 1);
+
+        cartItem.decreaseQuantity();
+
+        if (cartItem.getQuantity() == 0)
+            removeProduct(posicao);
+
+        return cartItem;
+    }
+
+    public CartItem increaseProduct(int posicao) {
+        if (posicao > cartItems.size() || posicao < 0)
+            return null;
+
+        CartItem cartItem = cartItems.get(posicao - 1);
+
+        cartItem.addQuantity();
+
+        return cartItem;
     }
 }

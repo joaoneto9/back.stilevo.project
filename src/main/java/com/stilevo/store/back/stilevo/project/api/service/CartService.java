@@ -2,12 +2,9 @@ package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.controller.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AddToCartRequestDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.response.CartItemResponseDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.response.CartResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Cart;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.CartItem;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
-import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.CartRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -29,26 +26,58 @@ public class CartService {
     }
 
 
-//    @Transactional
-//    public CartResponseDTO addProductToCart(AddToCartRequestDTO addToCartRequestDTO) {
-//        Cart cart = findById(addToCartRequestDTO.getClientId());
-//
-//        ProductVariation productVariation = productVariationService.findById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
-//
-//        cart.addProduct(productVariation); // adiciona o produto no cart
-//
-//        cartRepository.save(cart); // slava o Cart
-//
-//        return new CartResponseDTO(cart.getCartItems()); // retorna um CartResponse
-//    }
+    @Transactional
+    public CartItem addProductToCart(AddToCartRequestDTO addToCartRequestDTO) {
+        Cart cart = findById(addToCartRequestDTO.getClientId());
 
-//    public CartResponseDTO toResponse(Cart cart) {
-//        return Cart(cart.getCartItems().stream().map().toList());
-//    }
-//
-//    public CartItemResponseDTO cartItemToResponse(CartItem cartItem) {
-//        CartItemResponseDTO cartItemResponseDTO = new CartItemResponseDTO();
-//        cartItemResponseDTO.setQuantity(cartItem.getQuantity());
-//        cartItemResponseDTO.setProductVariation(cartItem.getProductVariation().);
-//    }
+        ProductVariation productVariation = productVariationService.findById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
+
+        CartItem cartItem = cart.addProduct(productVariation); // adiciona o produto no cart
+
+        cartRepository.save(cart); // salva o Cart
+
+        return cartItem;
+    }
+
+    @Transactional
+    public CartItem removeProduct(Long id, int posicao) {
+        Cart cart = findById(id);
+
+        CartItem cartItem = cart.removeProduct(posicao);
+
+        if (cartItem == null)
+            throw new NotFoundException("produto no carrinho nao encontradi");
+
+        cartRepository.save(cart); // atualiza
+
+        return cartItem;
+    }
+
+    @Transactional
+    public CartItem decreaseProduct(Long id, int posicao) {
+        Cart cart = findById(id);
+
+        CartItem cartItem = cart.decreaseProduct(posicao);
+
+        if (cartItem == null)
+            throw new NotFoundException("produto no carrinho nao encontradi");
+
+        cartRepository.save(cart); // atualiza
+
+        return cartItem;
+    }
+
+    @Transactional
+    public CartItem increaseProduct(Long id, int posicao) {
+        Cart cart = findById(id);
+
+        CartItem cartItem = cart.increaseProduct(posicao);
+
+        if (cartItem == null)
+            throw new NotFoundException("produto no carrinho nao encontradi");
+
+        cartRepository.save(cart); // atualiza
+
+        return cartItem;
+    }
 }
