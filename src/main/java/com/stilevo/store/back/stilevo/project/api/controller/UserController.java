@@ -1,11 +1,8 @@
 package com.stilevo.store.back.stilevo.project.api.controller;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.authentication.AuthenticationUserDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AddToCartRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoRequestDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.request.ProductVariationRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.response.EnderecoResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.LoginResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;

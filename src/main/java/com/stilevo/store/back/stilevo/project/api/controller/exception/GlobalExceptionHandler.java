@@ -3,6 +3,7 @@ package com.stilevo.store.back.stilevo.project.api.controller.exception;
 import com.stilevo.store.back.stilevo.project.api.controller.exception.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -19,8 +20,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("CONFLICT", exception.getMessage()));
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationErrorCep(MethodArgumentNotValidException ex) {
+        String mensagem = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(erro -> erro.getDefaultMessage())
+                .findFirst()
+                .orElse("Dados inválidos");
+
+        return handleInvalidFormatCep(new InvalidFormatCepException(mensagem));
+    }
+
     @ExceptionHandler(InvallidCepException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCep(InvallidCepException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("INVALID_CEP", exception.getMessage()));
     }
+
+    @ExceptionHandler(InvalidFormatCepException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidFormatCep(InvalidFormatCepException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("INVALID_FORMAT_CEP", exception.getMessage()));
+    }
+
 }

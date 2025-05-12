@@ -15,18 +15,13 @@ public class EnderecoController {
 
     private final EnderecoMapper enderecoMapper;
 
-    private final EnderecoService enderecoService;
-
     public EnderecoController(EnderecoMapper enderecoMapper, EnderecoService enderecoService) {
         this.enderecoMapper = enderecoMapper;
-        this.enderecoService = enderecoService;
     }
 
     @GetMapping(value = "/GET/via/cep/{cep}") // ele so busca e mostra o CEP
     public ResponseEntity<EnderecoResponseDTO> getEnderecoViaCep(@PathVariable String cep) {
-        return ResponseEntity.ok(enderecoMapper.toResponse(enderecoService.getCep(cep)));
+        return ResponseEntity.ok(enderecoMapper.toResponse(EnderecoService.getCep(cep)));
     }
-
-
 
 }
