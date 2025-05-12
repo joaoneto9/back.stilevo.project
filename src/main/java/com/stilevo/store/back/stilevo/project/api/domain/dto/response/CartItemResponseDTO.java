@@ -1,5 +1,6 @@
 package com.stilevo.store.back.stilevo.project.api.domain.dto.response;
 
+import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,4 +13,7 @@ public class CartItemResponseDTO {
     private ProductVariationResponseDTO productVariation;
 
     private int quantity;
+
+    private int posicao;
+
 }

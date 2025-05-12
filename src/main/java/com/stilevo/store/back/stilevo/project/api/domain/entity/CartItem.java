@@ -1,6 +1,4 @@
 package com.stilevo.store.back.stilevo.project.api.domain.entity;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -34,6 +32,8 @@ public class CartItem implements Serializable { // tabela intermediaria
 
     private int quantity = 1; // comeca com um
 
+    private int posicao;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
@@ -52,6 +52,10 @@ public class CartItem implements Serializable { // tabela intermediaria
 
     public void addQuantity() {
         quantity++;
+    }
+
+    public void decreaseQuantity() {
+        quantity--;
     }
 
 }

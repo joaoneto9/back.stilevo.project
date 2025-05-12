@@ -13,6 +13,5 @@ public class UserResponseDTO {
     private String username;
     private String email;
     private Endereco endereco;
-    private CartResponseDTO cart;
 
 }
