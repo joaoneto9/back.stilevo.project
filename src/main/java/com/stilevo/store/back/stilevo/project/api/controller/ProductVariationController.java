@@ -40,7 +40,7 @@ public class ProductVariationController {
 
     @PostMapping(value = "POST/save")
     public ResponseEntity<ProductVariationResponseDTO> save(@RequestBody @Valid ProductVariationRequestDTO productVariationRequestDTO) {
-        return ResponseEntity.ok(productVariationService.save(productVariationRequestDTO, mapper));
+        return ResponseEntity.ok(mapper.toResponse(productVariationService.save(productVariationRequestDTO, mapper)));
     }
 
     @DeleteMapping(value = "DELETE/{id}")

@@ -2,8 +2,10 @@ package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.controller.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AddToCartRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.response.CartItemResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.CartResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Cart;
+import com.stilevo.store.back.stilevo.project.api.domain.entity.CartItem;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.CartRepository;
@@ -27,16 +29,26 @@ public class CartService {
     }
 
 
-    @Transactional
-    public CartResponseDTO addProductToCart(AddToCartRequestDTO addToCartRequestDTO) {
-        Cart cart = findById(addToCartRequestDTO.getClientId());
+//    @Transactional
+//    public CartResponseDTO addProductToCart(AddToCartRequestDTO addToCartRequestDTO) {
+//        Cart cart = findById(addToCartRequestDTO.getClientId());
+//
+//        ProductVariation productVariation = productVariationService.findById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
+//
+//        cart.addProduct(productVariation); // adiciona o produto no cart
+//
+//        cartRepository.save(cart); // slava o Cart
+//
+//        return new CartResponseDTO(cart.getCartItems()); // retorna um CartResponse
+//    }
 
-        ProductVariation productVariation = productVariationService.findById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
-
-        cart.addProduct(productVariation); // adiciona o produto no cart
-
-        cartRepository.save(cart); // slava o Cart
-
-        return new CartResponseDTO(cart.getCartItems()); // retorna um CartResponse
-    }
+//    public CartResponseDTO toResponse(Cart cart) {
+//        return Cart(cart.getCartItems().stream().map().toList());
+//    }
+//
+//    public CartItemResponseDTO cartItemToResponse(CartItem cartItem) {
+//        CartItemResponseDTO cartItemResponseDTO = new CartItemResponseDTO();
+//        cartItemResponseDTO.setQuantity(cartItem.getQuantity());
+//        cartItemResponseDTO.setProductVariation(cartItem.getProductVariation().);
+//    }
 }
