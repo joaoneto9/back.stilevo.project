@@ -12,6 +12,6 @@ public class UserResponseDTO {
     private Long id;
     private String username;
     private String email;
-    private Endereco endereco;
+    private EnderecoResponseDTO endereco;
 
 }

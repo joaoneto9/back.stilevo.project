@@ -18,4 +18,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleConflict(ConflictException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("CONFLICT", exception.getMessage()));
     }
+
+    @ExceptionHandler(InvallidCepException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCep(InvallidCepException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("INVALID_CEP", exception.getMessage()));
+    }
 }

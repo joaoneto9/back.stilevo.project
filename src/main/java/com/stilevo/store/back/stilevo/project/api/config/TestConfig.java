@@ -46,8 +46,8 @@ public class TestConfig implements CommandLineRunner {
         productVariationRepository.saveAll(List.of(variation1, variation2, variation3));
 
         // Criando instâncias de Endereco
-        Endereco endereco1 = new Endereco("Rua das Flores", "123", "CidadeX", "EstadoY", "12345-678");
-        Endereco endereco2 = new Endereco("Avenida Brasil", "456", "CidadeZ", "EstadoW", "98765-432");
+        Endereco endereco1 = new Endereco("12345-678", "Rua das Flores", "Apto 101", "Bairro das Palmeiras", "CidadeX", "EstadoY", 123, "Próximo ao supermercado");
+        Endereco endereco2 = new Endereco("98765-432", "Avenida Brasil", "de 1000 a 2000 - lado par", "Bairro Central", "CidadeZ", "EstadoW", 456, "Em frente ao parque");
 
         // Criando instâncias de User sem carrinho (Cart)
         User user1 = new User(null, "joao_silva", "joao.silva@email.com", "senha123", endereco1, UserRole.USER, null);
