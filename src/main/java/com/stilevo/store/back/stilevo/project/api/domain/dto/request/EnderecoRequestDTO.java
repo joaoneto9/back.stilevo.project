@@ -1,18 +1,15 @@
-package com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable;
+package com.stilevo.store.back.stilevo.project.api.domain.dto.request;
 
-
-import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
-@Embeddable
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-public class Endereco {
+@AllArgsConstructor
+@ToString
+public class EnderecoRequestDTO {
 
     private String cep;
     private String logradouro;

@@ -1,25 +1,20 @@
-package com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable;
+package com.stilevo.store.back.stilevo.project.api.domain.dto.response;
 
-
-import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Embeddable
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-public class Endereco {
+@AllArgsConstructor
+public class EnderecoResponseDTO {
 
     private String cep;
     private String logradouro;
     private String complemento;
     private String bairro;
     private String localidade;
-    private String uf;
+    private String uf; // estado
     private Integer numero;
     private String pontoReferencia;
 

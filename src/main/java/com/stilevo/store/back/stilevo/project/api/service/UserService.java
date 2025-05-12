@@ -2,8 +2,12 @@ package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.controller.exception.ConflictException;
 import com.stilevo.store.back.stilevo.project.api.controller.exception.NotFoundException;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoViacepRequest;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
+import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
+import com.stilevo.store.back.stilevo.project.api.mapper.EnderecoMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,8 +46,20 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user); // salva no banco
     }
 
+    @Transactional
+    public User putEndereco(Endereco endereco, Long id) {
+        User user = findById(id);
+
+        user.setEndereco(endereco);
+
+        userRepository.save(user);
+
+        return user;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email);
     }
+
 }
