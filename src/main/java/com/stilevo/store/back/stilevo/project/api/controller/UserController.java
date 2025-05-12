@@ -51,7 +51,7 @@ public class UserController {
 
     @PostMapping(value = "/POST/register")
     public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-        return userService.save(userRequestDTO, userMapper);
+        return ResponseEntity.ok(userMapper.toResponse(userService.save(userMapper.toEntity(userRequestDTO))));
     }
 
     @PostMapping(value = "POST/login")

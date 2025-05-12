@@ -25,7 +25,6 @@ public class CartItem implements Serializable { // tabela intermediaria
     @ManyToOne
     @MapsId
     @JoinColumn(name = "cart_id")
-    @JsonIgnore
     private Cart cart;
 
     @ManyToOne

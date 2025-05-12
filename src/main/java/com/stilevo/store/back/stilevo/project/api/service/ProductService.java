@@ -30,10 +30,10 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("erro ao buscar produto com id " + id));
     }
 
-    public ProductResponseDTO save(ProductRequestDTO productRequestDTO, ProductMapper mapper) {
-        if (productRespository.findByName(productRequestDTO.getName()).isPresent())
+    public Product save(Product product) {
+        if (productRespository.findByName(product.getName()).isPresent())
             throw new ConflictException("produto com esse nome ja existe");
 
-        return mapper.toResponse(productRespository.save(mapper.toEntity(productRequestDTO)));
+        return productRespository.save(product);
     }
 }

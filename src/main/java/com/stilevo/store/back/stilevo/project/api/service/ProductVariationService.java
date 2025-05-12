@@ -2,17 +2,14 @@ package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.controller.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.ProductVariationRequestDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.response.ProductVariationResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Product;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
-import com.stilevo.store.back.stilevo.project.api.domain.repository.ProductRespository;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.ProductVariationRepository;
 import com.stilevo.store.back.stilevo.project.api.mapper.ProductVariationMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductVariationService {
@@ -36,14 +33,14 @@ public class ProductVariationService {
     }
 
     @Transactional
-    public ProductVariationResponseDTO save(ProductVariationRequestDTO productVariationRequestDTO, ProductVariationMapper mapper) {
+    public ProductVariation save(ProductVariationRequestDTO productVariationRequestDTO, ProductVariationMapper mapper) {
         Product product = productService.findById(productVariationRequestDTO.getProductId()); // ja lanca essa excessao no service do Product Service
 
         ProductVariation productVariation = mapper.toEntity(productVariationRequestDTO); // transforma em entidade
 
         productVariation.setProduct(product); // set do produto
 
-        return mapper.toResponse(productVariationRepository.save(productVariation)); // salva no banco
+        return productVariationRepository.save(productVariation); // salva no banco
     }
 
     @Transactional
@@ -69,5 +66,6 @@ public class ProductVariationService {
 
         return productVariationRepository.save(productVariation);
     }
+
 
 }
