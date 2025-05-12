@@ -50,6 +50,8 @@ public class UserService implements UserDetailsService {
     public User putEndereco(Endereco endereco, Long id) {
         User user = findById(id);
 
+        EnderecoService.getCep(endereco.getCep()); // valida o Cep antes de mandar, so por preocausao.
+
         user.setEndereco(endereco);
 
         userRepository.save(user);

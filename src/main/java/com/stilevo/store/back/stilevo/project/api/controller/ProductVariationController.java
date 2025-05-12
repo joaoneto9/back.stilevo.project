@@ -51,7 +51,7 @@ public class ProductVariationController {
     @PutMapping(value = "UPDATE/{id}")
     public ResponseEntity<ProductVariationResponseDTO> update(
             @PathVariable Long id,
-            @RequestBody ProductVariationRequestDTO newProduct
+            @RequestBody @Valid ProductVariationRequestDTO newProduct
     ) {
         return ResponseEntity.ok(mapper.toResponse(productVariationService.update(id, newProduct)));
     }
