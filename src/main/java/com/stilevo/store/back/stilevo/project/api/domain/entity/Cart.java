@@ -3,6 +3,7 @@ package com.stilevo.store.back.stilevo.project.api.domain.entity;
 import com.stilevo.store.back.stilevo.project.api.domain.enums.Size;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.CartRepository;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -63,14 +64,7 @@ public class Cart implements Serializable {
         newCartItem.setProductVariation(productVariation);
         newCartItem.setSize(size);
 
-        cartItems.add(newCartItem);
-
         return newCartItem;
-    }
-
-    public Long getLastProductId() {
-        return cartItems.get(cartItems.size() - 1).getId();
-        // fiz esse metodo para pegar o ID caso o Produto nao existisse ainda, pois senao fica null
     }
 
     public CartItem removeProduct(int posicao) {

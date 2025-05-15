@@ -5,6 +5,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AddToCartRe
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Cart;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.CartItem;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
+import com.stilevo.store.back.stilevo.project.api.domain.repository.CartItemRepository;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.CartRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,12 @@ public class CartService {
 
     private final CartRepository cartRepository;
     private final ProductVariationService productVariationService;
+    private final CartItemRepository cartItemRepository;
 
-    public CartService(CartRepository cartRepository, ProductVariationService productVariationService) {
+    public CartService(CartRepository cartRepository, ProductVariationService productVariationService, CartItemRepository cartItemRepository) {
         this.cartRepository = cartRepository;
         this.productVariationService = productVariationService;
+        this.cartItemRepository = cartItemRepository;
     }
 
     public Cart findById(Long id) {
@@ -34,11 +37,7 @@ public class CartService {
 
         CartItem cartItem = cart.addProduct(productVariation, addToCartRequestDTO.getSize()); // adiciona o produto no cart
 
-        cartRepository.save(cart);
-
-        cartItem.setId(cart.getLastProductId());
-
-        return cartItem;
+        return cartItemRepository.save(cartItem);
     }
 
     @Transactional
