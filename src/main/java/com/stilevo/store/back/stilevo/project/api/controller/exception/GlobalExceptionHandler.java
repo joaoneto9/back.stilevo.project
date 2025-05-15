@@ -42,4 +42,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("INVALID_FORMAT_CEP", exception.getMessage()));
     }
 
+    @ExceptionHandler(InvalidAuthenticationUserException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCep(InvalidAuthenticationUserException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("ERROR_LOGIN", exception.getMessage()));
+    }
+
 }

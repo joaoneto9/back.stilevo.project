@@ -32,9 +32,11 @@ public class CartService {
 
         ProductVariation productVariation = productVariationService.findById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
 
-        CartItem cartItem = cart.addProduct(productVariation); // adiciona o produto no cart
+        CartItem cartItem = cart.addProduct(productVariation, addToCartRequestDTO.getSize()); // adiciona o produto no cart
 
-        cartRepository.save(cart); // salva o Cart
+        cartRepository.save(cart);
+
+        cartItem.setId(cart.getLastProductId());
 
         return cartItem;
     }

@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductVariationRequestDTO {
 
-    @NotNull
-    private Size size;
-
     @NotBlank
     private String color;
 

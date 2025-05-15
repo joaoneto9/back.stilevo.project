@@ -39,9 +39,9 @@ public class TestConfig implements CommandLineRunner {
 
         productRespository.saveAll(List.of(p1, p2, p3));
 
-        ProductVariation variation1 = new ProductVariation(null, Size.M, "Azul", 10, "https://imagem.com/camisa-azul.jpg", p1);
-        ProductVariation variation2 = new ProductVariation(null, Size.G, "Preto", 5, "https://imagem.com/camisa-preta.jpg", p1);
-        ProductVariation variation3 = new ProductVariation(null, Size.P, "Branco", 8, "https://imagem.com/camisa-branca.jpg", p1);
+        ProductVariation variation1 = new ProductVariation(null, "Azul", 10, "https://imagem.com/camisa-azul.jpg", p1);
+        ProductVariation variation2 = new ProductVariation(null, "Preto", 5, "https://imagem.com/camisa-preta.jpg", p1);
+        ProductVariation variation3 = new ProductVariation(null, "Branco", 8, "https://imagem.com/camisa-branca.jpg", p1);
 
         productVariationRepository.saveAll(List.of(variation1, variation2, variation3));
 

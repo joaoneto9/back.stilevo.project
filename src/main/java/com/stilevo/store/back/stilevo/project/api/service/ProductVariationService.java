@@ -58,7 +58,6 @@ public class ProductVariationService {
         ProductVariation productVariation = productVariationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Produto Variado nao Encontrado com id: " + id));
 
-        productVariation.setSize(newProduct.getSize());
         productVariation.setColor(newProduct.getColor());
         productVariation.setDeposit(newProduct.getDeposit());
         productVariation.setImageUrl(newProduct.getImageUrl());

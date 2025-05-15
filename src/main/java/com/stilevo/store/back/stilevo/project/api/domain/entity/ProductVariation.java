@@ -24,9 +24,6 @@ public class ProductVariation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Size size;
-
     private String color;
 
     private Integer deposit; //quantidades dessa roupa que tem no deposito

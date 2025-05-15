@@ -1,5 +1,7 @@
 package com.stilevo.store.back.stilevo.project.api.domain.entity;
 
+import com.stilevo.store.back.stilevo.project.api.domain.enums.Size;
+import com.stilevo.store.back.stilevo.project.api.domain.repository.CartRepository;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -29,7 +31,6 @@ public class Cart implements Serializable {
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude // se remover da lista, remove do banco tambem
     private List<CartItem> cartItems = new ArrayList<>();
 
     @Override
@@ -48,20 +49,28 @@ public class Cart implements Serializable {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
-    public CartItem addProduct(ProductVariation productVariation) {
+    public CartItem addProduct(ProductVariation productVariation, Size size) {
         for (CartItem cartItem : cartItems) {
-            if (cartItem.getProductVariation().equals(productVariation)) {
+            if (cartItem.getProductVariation().equals(productVariation) && cartItem.getSize().equals(size)) {
                 cartItem.addQuantity();
                 return cartItem;
             }
         }
 
         CartItem newCartItem = new CartItem();
+
         newCartItem.setCart(this);
         newCartItem.setProductVariation(productVariation);
+        newCartItem.setSize(size);
+
         cartItems.add(newCartItem);
-        newCartItem.setPosicao(cartItems.size());
+
         return newCartItem;
+    }
+
+    public Long getLastProductId() {
+        return cartItems.get(cartItems.size() - 1).getId();
+        // fiz esse metodo para pegar o ID caso o Produto nao existisse ainda, pois senao fica null
     }
 
     public CartItem removeProduct(int posicao) {
