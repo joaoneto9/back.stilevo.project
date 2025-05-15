@@ -12,8 +12,6 @@ public class ProductVariationResponseDTO {
 
     private Long id;
 
-    private Size size;
-
     private String color;
 
     private Integer deposit;

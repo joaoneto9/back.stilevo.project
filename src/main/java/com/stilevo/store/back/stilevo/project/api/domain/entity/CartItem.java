@@ -1,4 +1,5 @@
 package com.stilevo.store.back.stilevo.project.api.domain.entity;
+import com.stilevo.store.back.stilevo.project.api.domain.enums.Size;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -21,7 +22,6 @@ public class CartItem implements Serializable { // tabela intermediaria
     private Long id;
 
     @ManyToOne
-    @MapsId
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
@@ -32,7 +32,8 @@ public class CartItem implements Serializable { // tabela intermediaria
 
     private int quantity = 1; // comeca com um
 
-    private int posicao;
+    @Enumerated(EnumType.STRING)
+    private Size size;
 
     @Override
     public final boolean equals(Object o) {
