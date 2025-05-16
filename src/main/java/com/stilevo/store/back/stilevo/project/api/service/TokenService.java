@@ -1,4 +1,4 @@
-package com.stilevo.store.back.stilevo.project.api.config.security;
+package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
