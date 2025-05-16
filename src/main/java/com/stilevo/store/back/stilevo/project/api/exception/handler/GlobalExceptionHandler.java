@@ -1,6 +1,6 @@
-package com.stilevo.store.back.stilevo.project.api.controller.exception;
+package com.stilevo.store.back.stilevo.project.api.exception.handler;
 
-import com.stilevo.store.back.stilevo.project.api.controller.exception.ErrorResponse;
+import com.stilevo.store.back.stilevo.project.api.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,15 +21,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationErrorCep(MethodArgumentNotValidException ex) {
-        String mensagem = ex.getBindingResult()
+    public ResponseEntity<ErrorResponse> handleValidationErrorCep(MethodArgumentNotValidException exception) {
+        String mensagem = exception.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(erro -> erro.getDefaultMessage())
                 .findFirst()
                 .orElse("Dados inválidos");
 
-        return handleInvalidFormatCep(new InvalidFormatCepException(mensagem));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("INVALID_REQUEST", exception.getMessage()));
     }
 
     @ExceptionHandler(InvallidCepException.class)

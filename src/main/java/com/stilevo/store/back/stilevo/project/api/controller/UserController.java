@@ -1,7 +1,7 @@
 package com.stilevo.store.back.stilevo.project.api.controller;
 
-import com.stilevo.store.back.stilevo.project.api.controller.exception.InvalidAuthenticationUserException;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.authentication.AuthenticationUserDTO;
+import com.stilevo.store.back.stilevo.project.api.exception.InvalidAuthenticationUserException;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AuthenticationUserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.LoginResponseDTO;
@@ -10,7 +10,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.mapper.EnderecoMapper;
 import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import com.stilevo.store.back.stilevo.project.api.service.UserService;
-import com.stilevo.store.back.stilevo.project.api.config.security.TokenService;
+import com.stilevo.store.back.stilevo.project.api.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/POST/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationUserDTO userLogin) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationUserRequestDTO userLogin) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(userLogin.email(), userLogin.password()); // vem do Spring Security
 
         try {

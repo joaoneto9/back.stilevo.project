@@ -1,4 +1,4 @@
-package com.stilevo.store.back.stilevo.project.api.controller.exception;
+package com.stilevo.store.back.stilevo.project.api.exception;
 
 public class NotFoundException extends RuntimeException {
   public NotFoundException(String message) {

@@ -1,7 +1,8 @@
 package com.stilevo.store.back.stilevo.project.api.service;
 
 
-import com.stilevo.store.back.stilevo.project.api.controller.exception.InvallidCepException;
+import com.stilevo.store.back.stilevo.project.api.exception.InvalidFormatCepException;
+import com.stilevo.store.back.stilevo.project.api.exception.InvallidCepException;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoViacepRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -22,7 +23,7 @@ public class EnderecoService {
 
             return enderecoViacepRequest;
         } catch (RestClientException e) {
-            throw new InvallidCepException("cep com formato invalido, erro ao buscar endereco!");
+            throw new InvalidFormatCepException("cep com formato invalido, erro ao buscar endereco!");
         }
     }
 }

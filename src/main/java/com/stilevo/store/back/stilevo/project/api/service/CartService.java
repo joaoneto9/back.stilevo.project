@@ -1,6 +1,6 @@
 package com.stilevo.store.back.stilevo.project.api.service;
 
-import com.stilevo.store.back.stilevo.project.api.controller.exception.NotFoundException;
+import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AddToCartRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Cart;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.CartItem;
