@@ -77,6 +77,14 @@ public class UserController {
 
     }
 
+    @PutMapping(value = "/UPDATE/{id}")
+    public ResponseEntity<UserResponseDTO> updateUser(
+            @PathVariable Long id,
+            @RequestBody @Valid UserRequestDTO userRequestDTO
+    ) {
+        return ResponseEntity.ok(userMapper.toResponse(userService.updateUser(id, userRequestDTO)));
+    }
+
     @PutMapping(value = "/PUT/endereco/{id}")
     public ResponseEntity<UserResponseDTO> putEndereco(
             @PathVariable Long id,

@@ -38,8 +38,10 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                                 .requestMatchers(HttpMethod.POST, "/api/users/POST/login").permitAll() // permite que todos podem logar
                                 .requestMatchers("/api/endereco/GET/via/cep/{cep}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/products/variation/POST/save").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/product/variation/DELETE/{id}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/products/variation/DELETE/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/products/variation/UPDATE/{id}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/products/DELETE/{id}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/products/UPDATE/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/products/POST/save").hasRole("ADMIN") // isso quer dizer que apensas os usuarios com role 'admin' estao autorizados para dar um POST com o endpoint '/product/save'
                                 .requestMatchers(HttpMethod.GET, "/api/users/GET/all").hasRole("ADMIN")
                                 .anyRequest().authenticated() // isso quer dizer que qualquer outra requisicao que for feita precisa de autenticacao

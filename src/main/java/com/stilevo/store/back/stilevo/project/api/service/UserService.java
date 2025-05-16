@@ -1,10 +1,12 @@
 package com.stilevo.store.back.stilevo.project.api.service;
 
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.exception.ConflictException;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
+import com.stilevo.store.back.stilevo.project.api.mapper.EnderecoMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -51,9 +53,8 @@ public class UserService implements UserDetailsService {
 
         user.setEndereco(endereco);
 
-        userRepository.save(user);
+        return userRepository.save(user);
 
-        return user;
     }
 
     @Override
@@ -61,4 +62,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+    public User updateUser(Long id, UserRequestDTO userRequestDTO) {
+        User user = findById(id); // encontra o usuario que devemos setar os atributos.
+
+        user.setPassword(userRequestDTO.getPassword());
+        user.setEmail(userRequestDTO.getEmail());
+        user.setUsername(userRequestDTO.getUsername());
+
+        return userRepository.save(user); // atualiza o usuario
+    }
 }
