@@ -12,6 +12,8 @@ import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import com.stilevo.store.back.stilevo.project.api.service.UserService;
 import com.stilevo.store.back.stilevo.project.api.service.TokenService;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -85,6 +87,11 @@ public class UserController {
             @RequestBody @Valid UserRequestDTO userRequestDTO
     ) {
         return ResponseEntity.ok(userMapper.toResponse(userService.updateUser(id, userMapper.toEntity(userRequestDTO))));
+    }
+
+    @DeleteMapping(value = "/DELETE/{id}")
+    public ResponseEntity<UserResponseDTO> deleteUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userMapper.toResponse(userService.delete(id)));
     }
 
 }
