@@ -1,14 +1,9 @@
 package com.stilevo.store.back.stilevo.project.api.service;
 
-import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.exception.ConflictException;
-import com.stilevo.store.back.stilevo.project.api.exception.InvalidFormatCepException;
-import com.stilevo.store.back.stilevo.project.api.exception.InvallidCepException;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
-import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
-import com.stilevo.store.back.stilevo.project.api.mapper.EnderecoMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

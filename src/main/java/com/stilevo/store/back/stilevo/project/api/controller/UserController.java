@@ -2,25 +2,20 @@ package com.stilevo.store.back.stilevo.project.api.controller;
 
 import com.stilevo.store.back.stilevo.project.api.exception.InvalidAuthenticationUserException;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AuthenticationUserRequestDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.LoginResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
-import com.stilevo.store.back.stilevo.project.api.mapper.EnderecoMapper;
 import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import com.stilevo.store.back.stilevo.project.api.service.UserService;
 import com.stilevo.store.back.stilevo.project.api.service.TokenService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.desktop.SystemSleepEvent;
 import java.util.List;
 
 @RestController
@@ -35,14 +30,11 @@ public class UserController {
 
     private final TokenService tokenService;
 
-    private final EnderecoMapper enderecoMapper;
-
-    public UserController(UserMapper userMapper, UserService userService, AuthenticationManager authenticationManager, TokenService tokenService, EnderecoMapper enderecoMapper) {
+    public UserController(UserMapper userMapper, UserService userService, AuthenticationManager authenticationManager, TokenService tokenService) {
         this.userMapper = userMapper;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
-        this.enderecoMapper = enderecoMapper;
     }
 
     @GetMapping(value = "/GET/all")
