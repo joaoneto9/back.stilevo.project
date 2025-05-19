@@ -65,8 +65,18 @@ public class UserService implements UserDetailsService {
 
     }
 
+    @Transactional
+    public User delete(Long id) {
+        User user = findById(id);
+
+        userRepository.delete(user);
+
+        return user;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email);
     }
+
 }
