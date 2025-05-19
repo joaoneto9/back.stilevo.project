@@ -2,6 +2,8 @@ package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.exception.ConflictException;
+import com.stilevo.store.back.stilevo.project.api.exception.InvalidFormatCepException;
+import com.stilevo.store.back.stilevo.project.api.exception.InvallidCepException;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
@@ -39,19 +41,25 @@ public class UserService implements UserDetailsService {
         if (loadUserByUsername(user.getEmail()) != null) // existe usuario com esse Email
             throw new ConflictException("email ja existente!");
 
-        String encryptPassword = new BCryptPasswordEncoder().encode(user.getPassword()); // cryptografa a senha
-        user.setPassword(encryptPassword); // set da senha cryptografada
+        user.setPassword(criptografarSenha(user.getPassword()));
 
         return userRepository.save(user); // salva no banco
     }
 
+    private String criptografarSenha(String senha) {
+        return new BCryptPasswordEncoder().encode(senha); // cryptografa a senha
+    }
+
     @Transactional
-    public User putEndereco(Endereco endereco, Long id) {
-        User user = findById(id);
+    public User updateUser(Long id, User newUser) {
 
-        EnderecoService.getCep(endereco.getCep()); // valida o Cep antes de mandar, so por preocausao.
+        User user = findById(id); // encontra o usuario que devemos setar os atributos.
 
-        user.setEndereco(endereco);
+        user.setPassword(criptografarSenha(newUser.getPassword()));
+        user.setEndereco(newUser.getEndereco());
+        user.setEmail(newUser.getEmail());
+        user.setName(newUser.getName());
+        user.setRole(newUser.getRole());
 
         return userRepository.save(user);
 
@@ -60,15 +68,5 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email);
-    }
-
-    public User updateUser(Long id, UserRequestDTO userRequestDTO) {
-        User user = findById(id); // encontra o usuario que devemos setar os atributos.
-
-        user.setPassword(userRequestDTO.getPassword());
-        user.setEmail(userRequestDTO.getEmail());
-        user.setUsername(userRequestDTO.getUsername());
-
-        return userRepository.save(user); // atualiza o usuario
     }
 }
