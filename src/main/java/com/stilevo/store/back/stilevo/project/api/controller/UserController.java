@@ -18,6 +18,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.desktop.SystemSleepEvent;
 import java.util.List;
 
 @RestController
@@ -77,20 +78,13 @@ public class UserController {
 
     }
 
+    // atualiza o User, o que e bom para que nao precise criar metodos especificos de atualizacaco.
     @PutMapping(value = "/UPDATE/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
             @RequestBody @Valid UserRequestDTO userRequestDTO
     ) {
-        return ResponseEntity.ok(userMapper.toResponse(userService.updateUser(id, userRequestDTO)));
-    }
-
-    @PutMapping(value = "/PUT/endereco/{id}")
-    public ResponseEntity<UserResponseDTO> putEndereco(
-            @PathVariable Long id,
-            @RequestBody @Valid EnderecoRequestDTO enderecoRequestDTO
-            ) {
-        return ResponseEntity.ok(userMapper.toResponse(userService.putEndereco(enderecoMapper.toEntity(enderecoRequestDTO), id)));
+        return ResponseEntity.ok(userMapper.toResponse(userService.updateUser(id, userMapper.toEntity(userRequestDTO))));
     }
 
 }

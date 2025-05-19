@@ -1,5 +1,6 @@
 package com.stilevo.store.back.stilevo.project.api.domain.dto.request;
 
+import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
 import com.stilevo.store.back.stilevo.project.api.domain.enums.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class UserRequestDTO {
 
     @NotBlank
-    private String username;
+    private String name;
 
     @NotBlank
     @Email
@@ -25,5 +26,7 @@ public class UserRequestDTO {
 
     @NotNull
     private UserRole role;
+
+    private EnderecoRequestDTO endereco;
 
 }
