@@ -88,10 +88,6 @@ public class UserService implements UserDetailsService {
             user.setEndereco(enderecoRequestToEntity(userPatch.getEndereco()));
         }
 
-        if (userPatch.getPassword() != null) {
-            user.setPassword(criptografarSenha(userPatch.getPassword()));
-        }
-
         return userRepository.save(user);
     }
 

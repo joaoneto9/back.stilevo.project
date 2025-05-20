@@ -56,10 +56,12 @@ public class UserController {
 
     @PostMapping(value = "/POST/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationUserRequestDTO userLogin) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(userLogin.email(), userLogin.password()); // vem do Spring Security
-
         try {
+            UsernamePasswordAuthenticationToken usernamePassword =
+                    new UsernamePasswordAuthenticationToken(userLogin.email(), userLogin.password()); // vem do Spring Security
+
             var auth = authenticationManager.authenticate(usernamePassword); // autheticar esse novo email e senha que foram passadas
+
             if (auth.getPrincipal() instanceof User user) {
                 String token = tokenService.generateToken(user);
                 return ResponseEntity.ok(new LoginResponseDTO(userMapper.toResponse(user), token));
@@ -87,12 +89,14 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toResponse(userService.delete(id)));
     }
 
-    @PatchMapping(value = "/PATCH/{id}") ResponseEntity<UserResponseDTO> parcialUpdate(
+    @PatchMapping(value = "/PATCH/{id}") ResponseEntity<LoginResponseDTO> parcialUpdate(
             @PathVariable Long id,
             @RequestBody @Valid UserPatchRequestDTO userPatch
             ) {
-        return ResponseEntity.ok(userMapper.toResponse(userService.parcialUpdateUser(id, userPatch)));
-
+        User user = userService.parcialUpdateUser(id, userPatch);
+        return login(new AuthenticationUserRequestDTO(user.getEmail(), userPatch.getPassword()));
+        // 'reloga' para pegar um novo token...
+        // o usuario e obrigado a apssar a asneha para mudar as informacoes...
     }
 
 }

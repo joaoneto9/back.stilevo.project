@@ -1,6 +1,7 @@
 package com.stilevo.store.back.stilevo.project.api.config.security;
 
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
+import com.stilevo.store.back.stilevo.project.api.exception.InvalidAuthenticationUserException;
 import com.stilevo.store.back.stilevo.project.api.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -34,9 +35,16 @@ public class SecurityFilter extends OncePerRequestFilter { // usa-se a cada requ
             return; // isso evita que erealiza a verificacao, pois o token e null
         }
 
-        var subject = tokenService.validateToken(token); // valida o token
+        String subject = tokenService.validateToken(token); // valida o token
+
         UserDetails user = userRepository.findByEmail(subject); // pega o usuario caso nao tenha dado o erro
-        var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+
+        if (user == null) {
+            throw new InvalidAuthenticationUserException("Usuário não encontrado. Autenticação falhou.");
+        }
+
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
         SecurityContextHolder.getContext()
                 .setAuthentication(authentication);
