@@ -1,5 +1,6 @@
 package com.stilevo.store.back.stilevo.project.api.controller;
 
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserPatchRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.exception.InvalidAuthenticationUserException;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AuthenticationUserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
@@ -84,6 +85,14 @@ public class UserController {
     @DeleteMapping(value = "/DELETE/{id}")
     public ResponseEntity<UserResponseDTO> deleteUser(@PathVariable Long id) {
         return ResponseEntity.ok(userMapper.toResponse(userService.delete(id)));
+    }
+
+    @PatchMapping(value = "/PATCH/{id}") ResponseEntity<UserResponseDTO> parcialUpdate(
+            @PathVariable Long id,
+            @RequestBody @Valid UserPatchRequestDTO userPatch
+            ) {
+        return ResponseEntity.ok(userMapper.toResponse(userService.parcialUpdateUser(id, userPatch)));
+
     }
 
 }

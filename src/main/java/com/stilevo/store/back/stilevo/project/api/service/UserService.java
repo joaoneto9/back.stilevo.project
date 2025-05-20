@@ -1,5 +1,8 @@
 package com.stilevo.store.back.stilevo.project.api.service;
 
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserPatchRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
 import com.stilevo.store.back.stilevo.project.api.exception.ConflictException;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
@@ -69,9 +72,50 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    @Transactional
+    public User parcialUpdateUser(Long id, UserPatchRequestDTO userPatch) {
+        User user = findById(id);
+
+        if (userPatch.getEmail() != null) {
+            user.setEmail(userPatch.getEmail());
+        }
+
+        if (userPatch.getName() != null) {
+            user.setName(userPatch.getName());
+        }
+
+        if (userPatch.getEndereco() != null) {
+            user.setEndereco(enderecoRequestToEntity(userPatch.getEndereco()));
+        }
+
+        if (userPatch.getPassword() != null) {
+            user.setPassword(criptografarSenha(userPatch.getPassword()));
+        }
+
+        return userRepository.save(user);
+    }
+
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email);
+    }
+
+
+    // nao ficou muito legal, mas retedno ajustar
+    private Endereco enderecoRequestToEntity(EnderecoRequestDTO enderecoRequestDTO) {
+        Endereco endereco = new Endereco();
+
+        endereco.setCep( enderecoRequestDTO.getCep() );
+        endereco.setLogradouro( enderecoRequestDTO.getLogradouro() );
+        endereco.setComplemento( enderecoRequestDTO.getComplemento() );
+        endereco.setBairro( enderecoRequestDTO.getBairro() );
+        endereco.setLocalidade( enderecoRequestDTO.getLocalidade() );
+        endereco.setUf( enderecoRequestDTO.getUf() );
+        endereco.setNumero( enderecoRequestDTO.getNumero() );
+        endereco.setPontoReferencia( enderecoRequestDTO.getPontoReferencia() );
+
+        return endereco;
     }
 
 }
