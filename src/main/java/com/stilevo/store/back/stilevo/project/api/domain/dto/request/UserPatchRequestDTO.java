@@ -13,11 +13,5 @@ public class UserPatchRequestDTO {
 
     private String name;
 
-    @Email(message = "Email invalido") // dispara o erro, menos se for null
-    private String email;
-
-    @NotBlank
-    private String password;
-
     private EnderecoRequestDTO endereco;
 }

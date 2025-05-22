@@ -27,15 +27,9 @@ public class UserController {
 
     private final UserService userService;
 
-    private final AuthenticationManager authenticationManager;
-
-    private final TokenService tokenService;
-
-    public UserController(UserMapper userMapper, UserService userService, AuthenticationManager authenticationManager, TokenService tokenService) {
+    public UserController(UserMapper userMapper, UserService userService) {
         this.userMapper = userMapper;
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.tokenService = tokenService;
     }
 
     @GetMapping(value = "/GET/all")
@@ -54,27 +48,6 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toResponse(userService.save(userMapper.toEntity(userRequestDTO))));
     }
 
-    @PostMapping(value = "/POST/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationUserRequestDTO userLogin) {
-        try {
-            UsernamePasswordAuthenticationToken usernamePassword =
-                    new UsernamePasswordAuthenticationToken(userLogin.email(), userLogin.password()); // vem do Spring Security
-
-            var auth = authenticationManager.authenticate(usernamePassword); // autheticar esse novo email e senha que foram passadas
-
-            if (auth.getPrincipal() instanceof User user) {
-                String token = tokenService.generateToken(user);
-                return ResponseEntity.ok(new LoginResponseDTO(userMapper.toResponse(user), token));
-            } else {
-                throw new InvalidAuthenticationUserException("Usuario nao authenticado, senha ou email invalidos.");
-            }
-        } catch (BadCredentialsException e) {
-            // Captura uma falha de autenticação (senha ou email inválidos)
-            throw new InvalidAuthenticationUserException("Usuário não autenticado, senha ou email inválidos.");
-        }
-
-    }
-
     // atualiza o User, o que e bom para que nao precise criar metodos especificos de atualizacaco.
     @PutMapping(value = "/UPDATE/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
@@ -89,14 +62,17 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toResponse(userService.delete(id)));
     }
 
-    @PatchMapping(value = "/PATCH/{id}") ResponseEntity<LoginResponseDTO> parcialUpdate(
+    /*
+    * esse metodo nao lida com mudancas criticas do Usuario, como Email e Senha, principalmente Email
+    * irei criar um Outro Metodo posteriormente para mudar esses dados e dar uma melhor resposat aao cliente
+    *
+    * */
+    @PatchMapping(value = "/PATCH/{id}") ResponseEntity<UserResponseDTO> parcialUpdate(
             @PathVariable Long id,
             @RequestBody @Valid UserPatchRequestDTO userPatch
             ) {
-        User user = userService.parcialUpdateUser(id, userPatch);
-        return login(new AuthenticationUserRequestDTO(user.getEmail(), userPatch.getPassword()));
-        // 'reloga' para pegar um novo token...
-        // o usuario e obrigado a apssar a asneha para mudar as informacoes...
+        return ResponseEntity.ok(userMapper.toResponse(userService.parcialUpdateUser(id, userPatch)));
+
     }
 
 }

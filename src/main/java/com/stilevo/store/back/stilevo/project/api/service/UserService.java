@@ -76,10 +76,6 @@ public class UserService implements UserDetailsService {
     public User parcialUpdateUser(Long id, UserPatchRequestDTO userPatch) {
         User user = findById(id);
 
-        if (userPatch.getEmail() != null) {
-            user.setEmail(userPatch.getEmail());
-        }
-
         if (userPatch.getName() != null) {
             user.setName(userPatch.getName());
         }
