@@ -35,7 +35,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // determina a politica de sessao
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers(HttpMethod.POST, "/api/users/POST/register").permitAll() // permite que todos podem registar usuario("apenas teste")
-                                .requestMatchers(HttpMethod.POST, "/api/users/POST/login").permitAll() // permite que todos podem logar
+                                .requestMatchers(HttpMethod.POST, "/api/auth/POST/login").permitAll() // permite que todos podem logar
                                 .requestMatchers(HttpMethod.POST, "/api/products/variation/POST/save").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/products/variation/DELETE/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/products/variation/UPDATE/{id}").hasRole("ADMIN")
