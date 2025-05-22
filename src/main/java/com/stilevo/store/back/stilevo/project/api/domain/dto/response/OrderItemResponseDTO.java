@@ -10,16 +10,11 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItemResponseDTO {
+public class OrderItemResponseDTO {
 
-    private Long id; // para sinalizar o numero do pedido
-
-    private ProductVariationResponseDTO productVariation;
-
-    private int quantity;
-
+    private Long id;
+    private ProductVariationResponseDTO product;
     private Size size;
-
+    private BigDecimal unitPrice;
     private BigDecimal totalPrice;
-
 }
