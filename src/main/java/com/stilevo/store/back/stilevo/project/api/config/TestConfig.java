@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -50,8 +51,8 @@ public class TestConfig implements CommandLineRunner {
         Endereco endereco2 = new Endereco("98765-432", "Avenida Brasil", "de 1000 a 2000 - lado par", "Bairro Central", "CidadeZ", "EstadoW", 456, "Em frente ao parque");
 
         // Criando instâncias de User sem carrinho (Cart)
-        User user1 = new User(null, "joao_silva", "joao.silva@email.com", "senha123", endereco1, UserRole.USER, null);
-        User user2 = new User(null, "maria_oliveira", "maria.oliveira@email.com", "senha456", endereco2, UserRole.USER, null);
+        User user1 = new User(null, "joao_silva", "joao.silva@email.com", "senha123", endereco1, UserRole.USER, null, new ArrayList<>());
+        User user2 = new User(null, "maria_oliveira", "maria.oliveira@email.com", "senha456", endereco2, UserRole.USER, null, new ArrayList<>());
 
         Cart cart1 = new Cart();
         cart1.setUser(user1);

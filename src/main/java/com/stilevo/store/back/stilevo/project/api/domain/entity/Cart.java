@@ -63,6 +63,7 @@ public class Cart implements Serializable {
         newCartItem.setCart(this);
         newCartItem.setProductVariation(productVariation);
         newCartItem.setSize(size);
+        newCartItem.addQuantity(); // adiciona um
 
         return newCartItem;
     }

@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -23,14 +24,16 @@ public class CartItem implements Serializable { // tabela intermediaria
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
-    private Cart cart;
+    private Cart cart; // que vai ser o mesmo do Usuario
 
     @ManyToOne
     @JoinColumn(name = "product_variation_id")
     @EqualsAndHashCode.Include
     private ProductVariation productVariation;
 
-    private int quantity = 1; // comeca com um
+    private BigDecimal totalPrice = BigDecimal.ZERO;
+
+    private int quantity; // comeca com um zero mesmo
 
     @Enumerated(EnumType.STRING)
     private Size size;
@@ -52,11 +55,13 @@ public class CartItem implements Serializable { // tabela intermediaria
     }
 
     public void addQuantity() {
-        quantity++;
+        this.quantity++;
+        this.totalPrice = totalPrice.add(productVariation.getPriceProduct());
     }
 
     public void decreaseQuantity() {
-        quantity--;
+        this.quantity--;
+        this.totalPrice = totalPrice.subtract(productVariation.getPriceProduct());
     }
 
 }

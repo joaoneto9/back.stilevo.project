@@ -31,9 +31,11 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
                 .cors(Customizer.withDefaults()) // ativa o CORS
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
                 .csrf(AbstractHttpConfigurer::disable) // csrf e desativado, pois ele nao e normalmente ativado para APIS REST
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // determina a politica de sessao
                 .authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers( "/h2-console/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/users/POST/register").permitAll() // permite que todos podem registar usuario("apenas teste")
                                 .requestMatchers(HttpMethod.POST, "/api/auth/POST/login").permitAll() // permite que todos podem logar
                                 .requestMatchers(HttpMethod.POST, "/api/products/variation/POST/save").hasRole("ADMIN")
