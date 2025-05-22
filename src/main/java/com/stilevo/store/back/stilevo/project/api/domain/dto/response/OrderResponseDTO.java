@@ -1,5 +1,6 @@
 package com.stilevo.store.back.stilevo.project.api.domain.dto.response;
 
+import com.stilevo.store.back.stilevo.project.api.domain.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,5 @@ public class OrderResponseDTO {
 
     private Long id;
     private List<OrderItemResponseDTO> orderItems;
-
+    private OrderStatus orderStatus;
 }

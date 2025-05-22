@@ -1,5 +1,6 @@
 package com.stilevo.store.back.stilevo.project.api.domain.entity;
 
+import com.stilevo.store.back.stilevo.project.api.domain.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,9 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> ordersItem = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus = OrderStatus.PENDING_PAYMENT;
 
     @Override
     public boolean equals(Object o) {
