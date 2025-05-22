@@ -43,8 +43,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidAuthenticationUserException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidCep(InvalidAuthenticationUserException exception) {
+    public ResponseEntity<ErrorResponse> handleInvalidAuthenticationUser(InvalidAuthenticationUserException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("ERROR_LOGIN", exception.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPasswordUser(InvalidPasswordException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("INCORRECT_PASSWORD", exception.getMessage()));
     }
 
 }
