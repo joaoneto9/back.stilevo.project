@@ -4,6 +4,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoReq
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserPatchRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
 import com.stilevo.store.back.stilevo.project.api.exception.ConflictException;
+import com.stilevo.store.back.stilevo.project.api.exception.InvalidPasswordException;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +23,12 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final PasswordEncoder passwordEncoder;
+    // interface responsavel para dar um atch entre a senha nao criptografada e a senha criptografada
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll() {
@@ -39,21 +45,18 @@ public class UserService implements UserDetailsService {
         if (loadUserByUsername(user.getEmail()) != null) // existe usuario com esse Email
             throw new ConflictException("email ja existente!");
 
-        user.setPassword(criptografarSenha(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user); // salva no banco
     }
 
-    private String criptografarSenha(String senha) {
-        return new BCryptPasswordEncoder().encode(senha); // cryptografa a senha
-    }
 
     @Transactional
     public User updateUser(Long id, User newUser) {
 
         User user = findById(id); // encontra o usuario que devemos setar os atributos.
 
-        user.setPassword(criptografarSenha(newUser.getPassword()));
+        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         user.setEndereco(newUser.getEndereco());
         user.setEmail(newUser.getEmail());
         user.setName(newUser.getName());
@@ -75,6 +78,10 @@ public class UserService implements UserDetailsService {
     @Transactional
     public User parcialUpdateUser(Long id, UserPatchRequestDTO userPatch) {
         User user = findById(id);
+
+        if (!passwordEncoder.matches(userPatch.getPassword(), user.getPassword()))
+            // primeiro parametro usa a senha nao criptografada e o segundo usa a senha criptografada
+            throw new InvalidPasswordException("user send an invalid password, to change data");
 
         if (userPatch.getName() != null) {
             user.setName(userPatch.getName());
