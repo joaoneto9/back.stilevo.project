@@ -14,9 +14,8 @@ public class OrderItemRequestDTO {
 
     @NotNull
     @Min(1)
-    private Long userId;
+    private Long UserId;
 
-    @NotNull
     @Min(1)
-    private Long CartItemPosition;
+    private int CartItemPosition;
 }

@@ -25,7 +25,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> ordersItem = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -41,5 +41,16 @@ public class Order {
     @Override
     public int hashCode() {
         return Objects.hashCode(Id);
+    }
+
+    public void addItem(OrderItem orderItem) {
+        for (OrderItem item : ordersItem) {
+            if (item.equals(orderItem)) {
+                item.addQuantity();
+                return;
+            }
+        }
+
+        ordersItem.add(orderItem);
     }
 }

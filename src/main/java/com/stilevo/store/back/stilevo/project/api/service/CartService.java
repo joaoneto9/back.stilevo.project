@@ -28,7 +28,6 @@ public class CartService {
                 .orElseThrow(() -> new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado"));
     }
 
-
     @Transactional
     public CartItem addProductToCart(AddToCartRequestDTO addToCartRequestDTO) {
         Cart cart = findById(addToCartRequestDTO.getClientId());
@@ -81,4 +80,8 @@ public class CartService {
 
         return cartItem;
     }
+
+    protected CartItem findCartItemByPosition(Long userId, int posicao) {
+        return findById(userId).getCartItems().get(posicao - 1); // ta feio, depois vou abstrair isso para seguir o "design da informacao"
+     }
 }
