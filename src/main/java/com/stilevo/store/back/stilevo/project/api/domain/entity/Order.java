@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +27,7 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> ordersItem = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus = OrderStatus.PENDING_PAYMENT;
@@ -44,13 +45,13 @@ public class Order {
     }
 
     public void addItem(OrderItem orderItem) {
-        for (OrderItem item : ordersItem) {
+        for (OrderItem item : orderItems) {
             if (item.equals(orderItem)) {
                 item.addQuantity();
                 return;
             }
         }
 
-        ordersItem.add(orderItem);
+        orderItems.add(orderItem);
     }
 }
