@@ -13,8 +13,9 @@ import java.math.BigDecimal;
 public class OrderItemResponseDTO {
 
     private Long id;
-    private ProductVariationResponseDTO product;
+    private ProductVariationResponseDTO productVariation;
     private Size size;
+    private int quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
 }

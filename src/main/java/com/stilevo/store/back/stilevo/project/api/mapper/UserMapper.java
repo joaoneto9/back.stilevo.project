@@ -6,5 +6,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper extends GeneralMapper<User, UserRequestDTO, UserResponseDTO> {
+public interface UserMapper {
+    User toEntity(UserRequestDTO userRequestDTO);
+    UserResponseDTO toResponse(User user);
 }

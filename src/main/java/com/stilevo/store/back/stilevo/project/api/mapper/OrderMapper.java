@@ -4,7 +4,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.dto.response.OrderRespo
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Order;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ProductVariationMapper.class})
 public interface OrderMapper{
     OrderResponseDTO toResponse(Order order);
 }
