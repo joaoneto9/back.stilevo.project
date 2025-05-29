@@ -23,9 +23,9 @@ public class UserRequestDTO {
 
     @NotBlank
     private String password;
-
     @NotNull
     private UserRole role;
+
 
     private EnderecoRequestDTO endereco;
 

@@ -26,7 +26,7 @@ public class CartController {
         return ResponseEntity.ok(cartMapper.toResponse(cartService.findById(id)));
     }
 
-    @PostMapping(value = "/{id}/products")
+    @PostMapping(value = "/{id}/product")
     public ResponseEntity<CartItemResponseDTO> addProduct(
             @PathVariable Long id,
             @RequestBody @Valid AddToCartRequestDTO addToCartRequestDTO
