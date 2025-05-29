@@ -2,12 +2,14 @@ package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserPatchRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
 import com.stilevo.store.back.stilevo.project.api.exception.ConflictException;
 import com.stilevo.store.back.stilevo.project.api.exception.InvalidPasswordException;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -54,17 +56,19 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public User updateUser(Long id, User newUser) {
+        try {
+            User user = userRepository.getReferenceById(id); // encontra o usuario que devemos setar os atributos.
 
-        User user = findById(id); // encontra o usuario que devemos setar os atributos.
+            user.setPassword(passwordEncoder.encode(newUser.getPassword()));
+            user.setEndereco(newUser.getEndereco());
+            user.setEmail(newUser.getEmail());
+            user.setName(newUser.getName());
+            user.setRole(newUser.getRole());
 
-        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        user.setEndereco(newUser.getEndereco());
-        user.setEmail(newUser.getEmail());
-        user.setName(newUser.getName());
-        user.setRole(newUser.getRole());
-
-        return userRepository.save(user);
-
+            return userRepository.save(user);
+        } catch (EntityNotFoundException exception) {
+            throw new NotFoundException("user nao encontrado");
+        }
     }
 
     @Transactional
@@ -78,21 +82,25 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public User parcialUpdateUser(Long id, UserPatchRequestDTO userPatch) {
-        User user = findById(id);
+        try {
+            User user = userRepository.getReferenceById(id);
 
-        if (!passwordEncoder.matches(userPatch.getPassword(), user.getPassword()))
-            // primeiro parametro usa a senha nao criptografada e o segundo usa a senha criptografada
-            throw new InvalidPasswordException("user send an invalid password, to change data");
+            if (!passwordEncoder.matches(userPatch.getPassword(), user.getPassword()))
+                // primeiro parametro usa a senha nao criptografada e o segundo usa a senha criptografada
+                throw new InvalidPasswordException("user send an invalid password, to change data");
 
-        if (userPatch.getName() != null) {
-            user.setName(userPatch.getName());
+            if (userPatch.getName() != null) {
+                user.setName(userPatch.getName());
+            }
+
+            if (userPatch.getEndereco() != null) {
+                user.setEndereco(enderecoRequestToEntity(userPatch.getEndereco()));
+            }
+
+            return userRepository.save(user);
+        } catch (EntityNotFoundException exception) {
+            throw new NotFoundException("user nao encontrado");
         }
-
-        if (userPatch.getEndereco() != null) {
-            user.setEndereco(enderecoRequestToEntity(userPatch.getEndereco()));
-        }
-
-        return userRepository.save(user);
     }
 
 

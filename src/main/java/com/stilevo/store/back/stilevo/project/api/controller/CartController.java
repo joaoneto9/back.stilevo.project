@@ -26,7 +26,7 @@ public class CartController {
         return ResponseEntity.ok(cartMapper.toResponse(cartService.findById(id)));
     }
 
-    @PutMapping(value = "/{id}/products")
+    @PostMapping(value = "/{id}/products")
     public ResponseEntity<CartItemResponseDTO> addProduct(
             @PathVariable Long id,
             @RequestBody @Valid AddToCartRequestDTO addToCartRequestDTO
@@ -34,7 +34,7 @@ public class CartController {
         return ResponseEntity.ok(cartMapper.toResponse(cartService.addProductToCart(id, addToCartRequestDTO))); // quero que retorne apenas o CarItem, que mudou
     }
 
-    @DeleteMapping(value = "/{id}/product/{position}/decrease")
+    @PatchMapping(value = "/{id}/product/{position}/decrease")
     public ResponseEntity<CartItemResponseDTO> decreaseProduct(
             @PathVariable Long id,
             @PathVariable int position
@@ -42,7 +42,7 @@ public class CartController {
         return ResponseEntity.ok(cartMapper.toResponse(cartService.decreaseProduct(id, position)));
     }
 
-    @PutMapping(value = "/{id}/product/{position}")
+    @PatchMapping(value = "/{id}/product/{position}/increase")
     public ResponseEntity<CartItemResponseDTO> increaseProduct(
             @PathVariable Long id,
             @PathVariable int position

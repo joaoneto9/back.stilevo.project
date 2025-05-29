@@ -2,15 +2,14 @@ package com.stilevo.store.back.stilevo.project.api.controller;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.ProductRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.ProductResponseDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.entity.Product;
 import com.stilevo.store.back.stilevo.project.api.mapper.ProductMapper;
 import com.stilevo.store.back.stilevo.project.api.service.ProductService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -40,7 +39,12 @@ public class ProductController {
 
     @PostMapping(value = "/")
     public ResponseEntity<ProductResponseDTO> save(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productMapper.toResponse(productService.save(productMapper.toEntity(productRequestDTO))));
+        ProductResponseDTO responseDTO = productMapper.toResponse(productService.save(productMapper.toEntity(productRequestDTO)));
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(responseDTO.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(responseDTO);
     }
 
     @DeleteMapping(value = "/{id}")
