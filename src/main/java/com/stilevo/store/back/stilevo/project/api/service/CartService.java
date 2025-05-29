@@ -7,6 +7,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.entity.CartItem;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.CartItemRepository;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.CartRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,55 +32,71 @@ public class CartService {
 
     @Transactional
     public CartItem addProductToCart(Long id, AddToCartRequestDTO addToCartRequestDTO) {
-        Cart cart = findById(id);
+        try {
+            Cart cart = cartRepository.getReferenceById(id);
 
-        ProductVariation productVariation = productVariationService.findById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
+            ProductVariation productVariation = productVariationService.findById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
 
-        CartItem cartItem = cart.addProduct(productVariation, addToCartRequestDTO.getSize()); // adiciona o produto no cart
+            CartItem cartItem = cart.addProduct(productVariation, addToCartRequestDTO.getSize()); // adiciona o produto no cart
 
-        return cartItemRepository.save(cartItem);
+            return cartItemRepository.save(cartItem);
+        } catch (EntityNotFoundException exception) {
+            throw new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado");
+        }
     }
 
     @Transactional
     public CartItem removeProduct(Long id, int posicao) {
-        Cart cart = findById(id);
+        try {
+            Cart cart = findById(id);
 
-        CartItem cartItem = cart.removeProduct(posicao);
+            CartItem cartItem = cart.removeProduct(posicao);
 
-        if (cartItem == null)
-            throw new NotFoundException("produto no carrinho nao encontradi");
+            if (cartItem == null)
+                throw new NotFoundException("produto no carrinho nao encontrado");
 
-        cartRepository.save(cart); // atualiza
+            cartRepository.save(cart); // atualiza
 
-        return cartItem;
+            return cartItem;
+        } catch (EntityNotFoundException exception) {
+            throw new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado");
+        }
     }
 
     @Transactional
     public CartItem decreaseProduct(Long id, int posicao) {
-        Cart cart = findById(id);
+        try {
+            Cart cart = cartRepository.getReferenceById(id);
 
-        CartItem cartItem = cart.decreaseProduct(posicao);
+            CartItem cartItem = cart.decreaseProduct(posicao);
 
-        if (cartItem == null)
-            throw new NotFoundException("produto no carrinho nao encontradi");
+            if (cartItem == null)
+                throw new NotFoundException("produto no carrinho nao encontrado");
 
-        cartRepository.save(cart); // atualiza
+            cartRepository.save(cart); // atualiza
 
-        return cartItem;
+            return cartItem;
+        } catch (EntityNotFoundException exception) {
+            throw new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado");
+        }
     }
 
     @Transactional
     public CartItem increaseProduct(Long id, int posicao) {
-        Cart cart = findById(id);
+        try {
+            Cart cart = cartRepository.getReferenceById(id);
 
-        CartItem cartItem = cart.increaseProduct(posicao);
+            CartItem cartItem = cart.increaseProduct(posicao);
 
-        if (cartItem == null)
-            throw new NotFoundException("produto no carrinho nao encontradi");
+            if (cartItem == null)
+                throw new NotFoundException("produto no carrinho nao encontrado");
 
-        cartRepository.save(cart); // atualiza
+            cartRepository.save(cart); // atualiza
 
-        return cartItem;
+            return cartItem;
+        } catch (EntityNotFoundException exception) {
+            throw new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado");
+        }
     }
 
     protected CartItem findCartItemByPosition(Long userId, int posicao) {

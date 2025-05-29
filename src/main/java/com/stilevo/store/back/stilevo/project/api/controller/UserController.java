@@ -1,22 +1,16 @@
 package com.stilevo.store.back.stilevo.project.api.controller;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserPatchRequestDTO;
-import com.stilevo.store.back.stilevo.project.api.exception.InvalidAuthenticationUserException;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AuthenticationUserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.dto.response.LoginResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
-import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import com.stilevo.store.back.stilevo.project.api.service.UserService;
-import com.stilevo.store.back.stilevo.project.api.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -45,7 +39,12 @@ public class UserController {
 
     @PostMapping(value = "/")
     public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-        return ResponseEntity.ok(userMapper.toResponse(userService.save(userMapper.toEntity(userRequestDTO))));
+        UserResponseDTO responseDTO = userMapper.toResponse(userService.save(userMapper.toEntity(userRequestDTO)));
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}")
+                .buildAndExpand(responseDTO.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(responseDTO);
     }
 
     // atualiza o User, o que e bom para que nao precise criar metodos especificos de atualizacaco.

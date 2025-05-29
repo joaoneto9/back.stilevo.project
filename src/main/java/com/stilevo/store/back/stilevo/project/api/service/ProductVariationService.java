@@ -6,6 +6,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.entity.Product;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.ProductVariationRepository;
 import com.stilevo.store.back.stilevo.project.api.mapper.ProductVariationMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -57,16 +58,19 @@ public class ProductVariationService {
 
     @Transactional
     public ProductVariation update(Long id, ProductVariationRequestDTO newProduct) {
-        ProductVariation productVariation = productVariationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Produto Variado nao Encontrado com id: " + id));
+        try {
+            ProductVariation productVariation = productVariationRepository.getReferenceById(id);
 
-        productVariation.setColor(newProduct.getColor());
-        productVariation.setDeposit(newProduct.getDeposit());
-        productVariation.setImageUrl(newProduct.getImageUrl());
-        // nao vou mudar o produto, porque nao faz sentido
+            productVariation.setColor(newProduct.getColor());
+            productVariation.setDeposit(newProduct.getDeposit());
+            productVariation.setImageUrl(newProduct.getImageUrl());
+            // nao vou mudar o produto, porque nao faz sentido
 
-        return productVariationRepository.save(productVariation);
+            return productVariationRepository.save(productVariation);
+        } catch (EntityNotFoundException exception) {
+            throw new NotFoundException("Produto Variado nao Encontrado com id: " + id);
+        }
+
     }
-
 
 }

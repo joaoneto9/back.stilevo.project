@@ -6,10 +6,11 @@ import com.stilevo.store.back.stilevo.project.api.domain.dto.response.OrderRespo
 import com.stilevo.store.back.stilevo.project.api.mapper.OrderMapper;
 import com.stilevo.store.back.stilevo.project.api.service.OrderService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class OrderController {
         this.orderMapper = orderMapper;
     }
 
-    @GetMapping(value = "{userId}")
+    @GetMapping(value = "/{userId}")
     public ResponseEntity<List<OrderResponseDTO>> getAllOrdersByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(orderService.getAllByUserId(userId).stream()
                 .map(orderMapper::toResponse)
@@ -36,7 +37,12 @@ public class OrderController {
     public ResponseEntity<OrderResponseDTO> save(
             @RequestBody @Valid OrderRequestDTO orderRequestDTO
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body((orderMapper.toResponse(orderService.save(orderRequestDTO))));
+        OrderResponseDTO responseDTO = orderMapper.toResponse(orderService.save(orderRequestDTO));
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(responseDTO.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(responseDTO);
     }
 
     @DeleteMapping(value = "/{orderId}")
@@ -46,8 +52,8 @@ public class OrderController {
         return ResponseEntity.ok(orderMapper.toResponse(orderService.delete(orderId)));
     }
 
-    @PutMapping(value = "/{orderId}")
-    public ResponseEntity<OrderResponseDTO> putOrderItem(
+    @PostMapping(value = "/{orderId}")
+    public ResponseEntity<OrderResponseDTO> addOrderItem(
             @PathVariable Long orderId,
             @RequestBody @Valid OrderItemRequestDTO orderItemRequestDTO
     ) {
