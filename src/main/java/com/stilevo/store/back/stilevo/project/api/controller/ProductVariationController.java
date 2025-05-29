@@ -8,9 +8,12 @@ import com.stilevo.store.back.stilevo.project.api.service.ProductVariationServic
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -26,29 +29,35 @@ public class ProductVariationController {
         this.productVariationService = productVariationService;
     }
 
-    @GetMapping(value = "GET/all")
+    @GetMapping(value = "/")
     public ResponseEntity<List<ProductVariationResponseDTO>> findAll() {
         return ResponseEntity.ok(productVariationService.findAll().stream()
                 .map(mapper::toResponse)
                 .toList());
     }
 
-    @GetMapping(value = "GET/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<ProductVariationResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(productVariationService.findById(id)));
     }
 
-    @PostMapping(value = "POST/save")
+    @PostMapping(value = "/")
     public ResponseEntity<ProductVariationResponseDTO> save(@RequestBody @Valid ProductVariationRequestDTO productVariationRequestDTO) {
-        return ResponseEntity.ok(mapper.toResponse(productVariationService.save(productVariationRequestDTO, mapper)));
+        ProductVariationResponseDTO responseDTO = mapper.toResponse(productVariationService.save(productVariationRequestDTO, mapper));
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(responseDTO.getId()).toUri();
+        // retrona o caminho qeu criou o produto mais o id desse produto, sendo retornado no header
+
+        return ResponseEntity.created(uri).body(responseDTO);
     }
 
-    @DeleteMapping(value = "DELETE/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<ProductVariationResponseDTO> delete(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(productVariationService.delete(id)));
     }
 
-    @PutMapping(value = "UPDATE/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<ProductVariationResponseDTO> update(
             @PathVariable Long id,
             @RequestBody @Valid ProductVariationRequestDTO newProduct

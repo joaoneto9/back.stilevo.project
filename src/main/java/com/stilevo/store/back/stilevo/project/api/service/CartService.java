@@ -7,8 +7,8 @@ import com.stilevo.store.back.stilevo.project.api.domain.entity.CartItem;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.CartItemRepository;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.CartRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CartService {
@@ -23,14 +23,15 @@ public class CartService {
         this.cartItemRepository = cartItemRepository;
     }
 
+    @Transactional(readOnly = true)
     public Cart findById(Long id) {
         return cartRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado"));
     }
 
     @Transactional
-    public CartItem addProductToCart(AddToCartRequestDTO addToCartRequestDTO) {
-        Cart cart = findById(addToCartRequestDTO.getClientId());
+    public CartItem addProductToCart(Long id, AddToCartRequestDTO addToCartRequestDTO) {
+        Cart cart = findById(id);
 
         ProductVariation productVariation = productVariationService.findById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
 

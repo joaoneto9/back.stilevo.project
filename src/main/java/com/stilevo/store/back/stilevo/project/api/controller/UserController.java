@@ -32,24 +32,24 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/GET/all")
+    @GetMapping(value = "/")
     public ResponseEntity<List<UserResponseDTO>> findAll() {
         return ResponseEntity.ok(userService.findAll().stream()
                 .map(userMapper::toResponse).toList());
     }
 
-    @GetMapping(value = "/GET/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userMapper.toResponse(userService.findById(id)));
     }
 
-    @PostMapping(value = "/POST/register")
+    @PostMapping(value = "/")
     public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         return ResponseEntity.ok(userMapper.toResponse(userService.save(userMapper.toEntity(userRequestDTO))));
     }
 
     // atualiza o User, o que e bom para que nao precise criar metodos especificos de atualizacaco.
-    @PutMapping(value = "/UPDATE/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
             @RequestBody @Valid UserRequestDTO userRequestDTO
@@ -57,7 +57,7 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toResponse(userService.updateUser(id, userMapper.toEntity(userRequestDTO))));
     }
 
-    @DeleteMapping(value = "/DELETE/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<UserResponseDTO> deleteUser(@PathVariable Long id) {
         return ResponseEntity.ok(userMapper.toResponse(userService.delete(id)));
     }
@@ -67,7 +67,7 @@ public class UserController {
     * irei criar um Outro Metodo posteriormente para mudar esses dados e dar uma melhor resposat aao cliente
     *
     * */
-    @PatchMapping(value = "/PATCH/{id}") ResponseEntity<UserResponseDTO> parcialUpdate(
+    @PatchMapping(value = "/{id}") ResponseEntity<UserResponseDTO> parcialUpdate(
             @PathVariable Long id,
             @RequestBody @Valid UserPatchRequestDTO userPatch
             ) {
