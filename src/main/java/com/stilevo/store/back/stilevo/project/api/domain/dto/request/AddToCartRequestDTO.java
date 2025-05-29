@@ -17,10 +17,6 @@ public class AddToCartRequestDTO {
 
     @NotNull
     @Min(1)
-    private Long clientId;
-
-    @NotNull
-    @Min(1)
     private Long productVariationId;
 
     @NotNull

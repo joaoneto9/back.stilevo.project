@@ -5,7 +5,7 @@ import com.stilevo.store.back.stilevo.project.api.exception.ConflictException;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Product;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.ProductRespository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +19,12 @@ public class ProductService {
         this.productRespository = productRespository;
     }
 
+    @Transactional(readOnly = true)
     public List<Product> findAll() {
         return productRespository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Product findById(Long id) {
         return productRespository.findById(id)
                 .orElseThrow(() -> new NotFoundException("erro ao buscar produto com id " + id));

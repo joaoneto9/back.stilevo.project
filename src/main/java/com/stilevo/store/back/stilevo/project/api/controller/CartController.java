@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "api/cart")
+@RequestMapping(value = "api/carts")
 public class CartController {
 
     private CartService cartService;
@@ -21,39 +21,42 @@ public class CartController {
         this.cartMapper = cartMapper;
     }
 
-    @GetMapping(value = "/GET/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<CartResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(cartMapper.toResponse(cartService.findById(id)));
     }
 
-    @PutMapping(value = "/PUT/product")
-    public ResponseEntity<CartItemResponseDTO> addProduct(@RequestBody @Valid AddToCartRequestDTO addToCartRequestDTO) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.addProductToCart(addToCartRequestDTO))); // quero que retorne apenas o CarItem, que mudou
+    @PutMapping(value = "/{id}/products")
+    public ResponseEntity<CartItemResponseDTO> addProduct(
+            @PathVariable Long id,
+            @RequestBody @Valid AddToCartRequestDTO addToCartRequestDTO
+    ) {
+        return ResponseEntity.ok(cartMapper.toResponse(cartService.addProductToCart(id, addToCartRequestDTO))); // quero que retorne apenas o CarItem, que mudou
     }
 
-    @DeleteMapping(value = "/DECREASE/{id}/product/{posicao}")
+    @DeleteMapping(value = "/{id}/product/{position}/decrease")
     public ResponseEntity<CartItemResponseDTO> decreaseProduct(
             @PathVariable Long id,
-            @PathVariable int posicao
+            @PathVariable int position
     ) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.decreaseProduct(id, posicao)));
+        return ResponseEntity.ok(cartMapper.toResponse(cartService.decreaseProduct(id, position)));
     }
 
-    @PutMapping(value = "/INCREASE/{id}/product/{posicao}")
+    @PutMapping(value = "/{id}/product/{position}")
     public ResponseEntity<CartItemResponseDTO> increaseProduct(
             @PathVariable Long id,
-            @PathVariable int posicao
+            @PathVariable int position
     ) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.increaseProduct(id, posicao)));
+        return ResponseEntity.ok(cartMapper.toResponse(cartService.increaseProduct(id, position)));
     }
 
 
-    @DeleteMapping(value = "/DELETE/{id}/product/{posicao}")
+    @DeleteMapping(value = "/{id}/product/{position}")
     public ResponseEntity<CartItemResponseDTO> removeProduct(
             @PathVariable Long id,
-            @PathVariable int posicao
+            @PathVariable int position
     ) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.removeProduct(id, posicao)));
+        return ResponseEntity.ok(cartMapper.toResponse(cartService.removeProduct(id, position)));
     }
 
 }

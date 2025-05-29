@@ -23,7 +23,7 @@ public class AuthController {
         this.userMapper = userMapper;
     }
 
-    @PostMapping(value = "/POST/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationUserRequestDTO userLogin) {
         return ResponseEntity.ok(authService.login(userLogin, userMapper));
     }

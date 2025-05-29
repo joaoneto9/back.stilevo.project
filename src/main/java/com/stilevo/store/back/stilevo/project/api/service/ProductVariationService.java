@@ -6,7 +6,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.entity.Product;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.ProductVariationRepository;
 import com.stilevo.store.back.stilevo.project.api.mapper.ProductVariationMapper;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,10 +23,12 @@ public class ProductVariationService {
         this.productService = productService;
     }
 
+    @Transactional(readOnly = true)
     public List<ProductVariation> findAll() {
         return productVariationRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public ProductVariation findById(Long id) {
         return productVariationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Product Variation not found at id: " + id));

@@ -6,10 +6,9 @@ import com.stilevo.store.back.stilevo.project.api.domain.entity.CartItem;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Order;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.OrderItem;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
-import com.stilevo.store.back.stilevo.project.api.domain.repository.OrderItemRepository;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.OrderRepository;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,10 +27,12 @@ public class OrderService {
         this.cartService = cartService;
     }
 
+    @Transactional(readOnly = true)
     public List<Order> getAllByUserId(Long userId) {
         return orderRepository.findAllByUser_Id(userId);
     }
 
+    @Transactional(readOnly = true)
     public Order findByID(Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order doesn't exist with this Id"));
