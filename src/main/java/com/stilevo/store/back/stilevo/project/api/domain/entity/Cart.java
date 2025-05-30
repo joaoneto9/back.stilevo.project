@@ -72,14 +72,14 @@ public class Cart implements Serializable {
         if (posicao > cartItems.size() || posicao < 0)
             return null;
 
-        return cartItems.remove(posicao - 1);
+        return cartItems.remove(posicao);
     }
 
     public CartItem decreaseProduct(int posicao) {
         if (posicao > cartItems.size() || posicao < 0)
             return null;
 
-        CartItem cartItem = cartItems.get(posicao - 1);
+        CartItem cartItem = cartItems.get(posicao);
 
         cartItem.decreaseQuantity();
 
@@ -93,7 +93,7 @@ public class Cart implements Serializable {
         if (posicao > cartItems.size() || posicao < 0)
             return null;
 
-        CartItem cartItem = cartItems.get(posicao - 1);
+        CartItem cartItem = cartItems.get(posicao);
 
         cartItem.addQuantity();
 
