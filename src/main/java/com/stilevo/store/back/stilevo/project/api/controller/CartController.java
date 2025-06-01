@@ -34,29 +34,29 @@ public class CartController {
         return ResponseEntity.ok(cartMapper.toResponse(cartService.addProductToCart(id, addToCartRequestDTO))); // quero que retorne apenas o CarItem, que mudou
     }
 
-    @PatchMapping(value = "/{id}/product/{position}/decrease")
+    @PatchMapping(value = "/{id}/product/{cartItemId}/decrease")
     public ResponseEntity<CartItemResponseDTO> decreaseProduct(
             @PathVariable Long id,
-            @PathVariable int position
+            @PathVariable Long cartItemId
     ) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.decreaseProduct(id, position)));
+        return ResponseEntity.ok(cartMapper.toResponse(cartService.decreaseProduct(id, cartItemId)));
     }
 
-    @PatchMapping(value = "/{id}/product/{position}/increase")
+    @PatchMapping(value = "/{id}/product/{cartItemId}/increase")
     public ResponseEntity<CartItemResponseDTO> increaseProduct(
             @PathVariable Long id,
-            @PathVariable int position
+            @PathVariable Long cartItemId
     ) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.increaseProduct(id, position)));
+        return ResponseEntity.ok(cartMapper.toResponse(cartService.increaseProduct(id, cartItemId)));
     }
 
 
-    @DeleteMapping(value = "/{id}/product/{position}")
-    public ResponseEntity<CartItemResponseDTO> removeProduct(
+    @DeleteMapping(value = "/{id}/product/{cartItemId}")
+    public ResponseEntity<Void> removeProduct(
             @PathVariable Long id,
-            @PathVariable int position
+            @PathVariable Long cartItemId
     ) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.removeProduct(id, position)));
+        return ResponseEntity.ok(cartService.removeProduct(id, cartItemId));
     }
 
 }
