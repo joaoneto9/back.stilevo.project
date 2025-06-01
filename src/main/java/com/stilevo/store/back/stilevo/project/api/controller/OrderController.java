@@ -2,6 +2,7 @@ package com.stilevo.store.back.stilevo.project.api.controller;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.OrderItemRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.OrderRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.response.OrderItemResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.OrderResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.mapper.OrderMapper;
 import com.stilevo.store.back.stilevo.project.api.service.OrderService;
@@ -53,7 +54,7 @@ public class OrderController {
     }
 
     @PostMapping(value = "/{orderId}")
-    public ResponseEntity<OrderResponseDTO> addOrderItem(
+    public ResponseEntity<OrderItemResponseDTO> addOrderItem(
             @PathVariable Long orderId,
             @RequestBody @Valid OrderItemRequestDTO orderItemRequestDTO
     ) {

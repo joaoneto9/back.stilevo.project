@@ -118,7 +118,7 @@ public class CartService {
 
     }
 
-    protected CartItem findCartItemByPosition(Long userId, int posicao) {
-        return findById(userId).getCartItems().get(posicao - 1); // ta feio, depois vou abstrair isso para seguir o "design da informacao"
+    protected CartItem findCartItemAtUserCart(Long userId, Long cartItemId) {
+        return cartItemFilter(findById(userId), cartItemId);
     }
 }

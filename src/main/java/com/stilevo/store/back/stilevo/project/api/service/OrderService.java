@@ -57,11 +57,11 @@ public class OrderService {
     }
 
     @Transactional
-    public Order putOrderItem(Long orderId, OrderItemRequestDTO orderItemRequestDTO) {
+    public OrderItem putOrderItem(Long orderId, OrderItemRequestDTO orderItemRequestDTO) {
         try {
             Order order = orderRepository.getReferenceById(orderId);
 
-            CartItem cartItem = cartService.findCartItemByPosition(orderItemRequestDTO.getUserId(), orderItemRequestDTO.getCartItemPosition());
+            CartItem cartItem = cartService.findCartItemAtUserCart(orderItemRequestDTO.getUserId(), orderItemRequestDTO.getCartItemId());
 
             OrderItem orderItem = mapCartItemToOrderItem(cartItem);
 
@@ -69,7 +69,7 @@ public class OrderService {
 
             order.addItem(orderItem);
 
-            return orderRepository.save(order);
+            return orderRepository.save(order).getOrderItems().get(order.getOrderItems().size() - 1);
         } catch (EntityNotFoundException exception) {
             throw new NotFoundException("pedido do usuario de id: " + orderId + " nao existe");
         }
