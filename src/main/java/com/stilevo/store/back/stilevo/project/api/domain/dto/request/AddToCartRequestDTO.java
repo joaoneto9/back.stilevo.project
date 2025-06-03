@@ -15,8 +15,8 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class AddToCartRequestDTO {
 
-    @NotNull
-    @Min(1)
+    @NotNull(message = "erro, ID do produto nulo")
+    @Min(value = 1, message = "erro, ID do produto invalido.")
     private Long productVariationId;
 
     @NotNull

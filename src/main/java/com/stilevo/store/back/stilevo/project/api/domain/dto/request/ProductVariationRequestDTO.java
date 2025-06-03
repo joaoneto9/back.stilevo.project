@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductVariationRequestDTO {
 
-    @NotBlank
+    @NotBlank(message = "erro, cor do produto variado esta vazia")
     private String color;
 
-    @NotNull
+    @NotNull(message = "erro, numero do proudto variado no deposito esta nulo")
     private Integer deposit;
 
     private String imageUrl;
 
-    @NotNull
+    @NotNull(message = "erro, Id do produto esta nulo")
     private Long productId;
 }

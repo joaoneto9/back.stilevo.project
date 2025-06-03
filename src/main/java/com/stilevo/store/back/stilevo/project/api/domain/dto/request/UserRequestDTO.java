@@ -14,18 +14,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRequestDTO {
 
-    @NotBlank
+    @NotBlank(message = "erro, o nome esta vazio")
     private String name;
 
-    @NotBlank
-    @Email
+    @Email(message = "erro, o formato do email esta invalido")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "erro, a senha esta vazia")
     private String password;
-    @NotNull
-    private UserRole role;
 
+    @NotNull(message = "erro, a role do usuario esta nula")
+    private UserRole role;
 
     private EnderecoRequestDTO endereco;
 
