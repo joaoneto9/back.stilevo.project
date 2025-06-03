@@ -12,7 +12,7 @@ public class UserPatchRequestDTO {
 
     private String name;
 
-    @NotBlank(message = "senha e necessaria para atualizar dados")
+    @NotBlank(message = "erro, senha e necessaria para atualizar dados")
     private String password;
 
     private EnderecoRequestDTO endereco;

@@ -17,22 +17,22 @@ public class EnderecoRequestDTO {
     @Pattern(regexp = "^\\d{5}-\\d{3}$", message = "CEP deve estar no formato 00000-000")
     private String cep;
 
-    @NotBlank
+    @NotBlank(message = "erro, formato do logradouro invalido")
     private String logradouro;
 
-    @NotNull
+    @NotBlank(message = "erro, complemneto nulo")
     private String complemento;
 
-    @NotNull
+    @NotBlank(message = "erro, bairro nulo")
     private String bairro;
 
-    @NotBlank
+    @NotBlank(message = "erro, formato da localidade invalido")
     private String localidade;
 
-    @NotBlank
+    @NotBlank(message = "erro, formato do UF invalido")
     private String uf;
 
-    @NotNull
+    @NotNull(message = "erro, numero nulo")
     private Integer numero;
 
     private String pontoReferencia;

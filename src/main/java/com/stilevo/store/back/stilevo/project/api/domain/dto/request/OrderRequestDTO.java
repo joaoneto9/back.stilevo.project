@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderRequestDTO {
 
-    @NotNull
+    @NotNull(message = "erro, Id do usuario e nulo")
     private Long userId;
 
 }

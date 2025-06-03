@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderItemRequestDTO {
 
-    @NotNull
-    @Min(1)
+    @NotNull(message = "erro, Id do usuario e nulo")
+    @Min(value = 1, message = "erro, Id do usuario invalido")
     private Long UserId;
 
-    @NotNull
-    @Min(1)
+    @NotNull(message = "erro, Id do item no carrinho e nulo")
+    @Min(value = 1, message = "erro, Id do item no carrinho invalido")
     private Long CartItemId;
 }
