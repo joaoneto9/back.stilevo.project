@@ -19,10 +19,12 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // precisa vir junto mesmo.
     @ManyToOne
     @JoinColumn(name = "product_variation_id")
     private ProductVariation productVariation;
 
+    // carregamento Eager, configurar uma consulta personalizada, posteriormente
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

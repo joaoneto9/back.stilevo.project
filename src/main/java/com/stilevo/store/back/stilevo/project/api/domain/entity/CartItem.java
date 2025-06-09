@@ -22,6 +22,7 @@ public class CartItem implements Serializable { // tabela intermediaria
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // precisa realizar uma consulta personalizada, pois realkiza uma busca desnecessaria
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart; // que vai ser o mesmo do Usuario

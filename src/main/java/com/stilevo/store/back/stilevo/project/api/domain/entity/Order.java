@@ -22,10 +22,12 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
+    // realizar um consulta personalizada porsteriormente, carregamento Eager não utilizado.
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    // carregamneto Lazy
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
