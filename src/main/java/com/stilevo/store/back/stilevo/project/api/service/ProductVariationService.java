@@ -26,7 +26,7 @@ public class ProductVariationService {
 
     @Transactional(readOnly = true)
     public List<ProductVariation> findAll() {
-        return productVariationRepository.findAll();
+        return productVariationRepository.findAllVariationsOfProducts();
     }
 
     @Transactional(readOnly = true)
