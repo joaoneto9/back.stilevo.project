@@ -26,7 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/")
+    @GetMapping
     public ResponseEntity<List<UserResponseDTO>> findAll() {
         return ResponseEntity.ok(userService.findAll().stream()
                 .map(userMapper::toResponse).toList());
@@ -37,7 +37,7 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toResponse(userService.findById(id)));
     }
 
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         UserResponseDTO responseDTO = userMapper.toResponse(userService.save(userMapper.toEntity(userRequestDTO)));
 

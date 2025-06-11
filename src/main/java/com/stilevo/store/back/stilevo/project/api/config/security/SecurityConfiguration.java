@@ -42,15 +42,17 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // determina a politica de sessao
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers( "/h2-console/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/users/").permitAll() // permite que todos podem registar usuario("apenas teste")
+                                .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // permite que todos podem registar usuario("apenas teste")
                                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // permite que todos podem logar
-                                .requestMatchers(HttpMethod.POST, "/api/products/variation/").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/products/variation").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/products/variation/{id}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/products/variation").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/products/variation/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/products/variation/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/products/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/products/{id}").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/api/products/").hasRole("ADMIN") // isso quer dizer que apensas os usuarios com role 'admin' estao autorizados para dar um POST com o endpoint '/product/save'
-                                .requestMatchers(HttpMethod.GET, "/api/users/").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN") // isso quer dizer que apensas os usuarios com role 'admin' estao autorizados para dar um POST com o endpoint '/product/save'
+                                .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/users/{id}").hasRole("ADMIN")
                                 .anyRequest().authenticated() // isso quer dizer que qualquer outra requisicao que for feita precisa de autenticacao
                 )
