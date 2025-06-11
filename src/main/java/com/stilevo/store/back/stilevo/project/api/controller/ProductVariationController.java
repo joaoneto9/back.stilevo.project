@@ -25,8 +25,15 @@ public class ProductVariationController {
         this.productVariationService = productVariationService;
     }
 
-    @GetMapping(value = "/")
-    public ResponseEntity<List<ProductVariationResponseDTO>> findAll() {
+    @GetMapping
+    public ResponseEntity<List<ProductVariationResponseDTO>> findAll(
+            @RequestParam(required = false, defaultValue = "") String name
+    ) {
+        if (!name.isEmpty())
+            return ResponseEntity.ok(productVariationService.findAllBySimilarName(name).stream()
+                    .map(mapper::toResponse)
+                    .toList());
+
         return ResponseEntity.ok(productVariationService.findAll().stream()
                 .map(mapper::toResponse)
                 .toList());
@@ -37,7 +44,7 @@ public class ProductVariationController {
         return ResponseEntity.ok(mapper.toResponse(productVariationService.findById(id)));
     }
 
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<ProductVariationResponseDTO> save(@RequestBody @Valid ProductVariationRequestDTO productVariationRequestDTO) {
         ProductVariationResponseDTO responseDTO = mapper.toResponse(productVariationService.save(productVariationRequestDTO, mapper));
 

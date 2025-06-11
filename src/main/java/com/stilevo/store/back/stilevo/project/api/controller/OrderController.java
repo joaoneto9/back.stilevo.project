@@ -34,7 +34,7 @@ public class OrderController {
                 .toList());
     }
 
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<OrderResponseDTO> save(
             @RequestBody @Valid OrderRequestDTO orderRequestDTO
     ) {

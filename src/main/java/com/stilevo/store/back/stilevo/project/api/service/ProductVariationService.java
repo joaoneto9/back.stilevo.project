@@ -9,7 +9,6 @@ import com.stilevo.store.back.stilevo.project.api.mapper.ProductVariationMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -26,7 +25,13 @@ public class ProductVariationService {
 
     @Transactional(readOnly = true)
     public List<ProductVariation> findAll() {
-        return productVariationRepository.findAllVariationsOfProducts();
+        return productVariationRepository.findAllVariationsWithProducts();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductVariation> findAllBySimilarName(String name) {
+        return productVariationRepository.findAllBySimilarName(name);
+
     }
 
     @Transactional(readOnly = true)
@@ -72,5 +77,4 @@ public class ProductVariationService {
         }
 
     }
-
 }

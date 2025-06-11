@@ -25,7 +25,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping(value = "/")
+    @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> findAll() {
         return ResponseEntity.ok(productService.findAll()
                 .stream()
@@ -37,7 +37,7 @@ public class ProductController {
         return ResponseEntity.ok(productMapper.toResponse(productService.findById(id)));
     }
 
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<ProductResponseDTO> save(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
         ProductResponseDTO responseDTO = productMapper.toResponse(productService.save(productMapper.toEntity(productRequestDTO)));
 
