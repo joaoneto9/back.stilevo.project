@@ -44,7 +44,6 @@ public class User implements Serializable, UserDetails {
 
     private UserRole role;
 
-    // relizar uma consulta personlizada para evitar buscar denecessária no banco
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 

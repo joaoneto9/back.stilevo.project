@@ -26,7 +26,7 @@ public class Cart implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId // vai ter a mesma PK da relacao que tem OneToOne
     @JoinColumn(name = "user_id") // deixa no banco o dado com "id", pois o MapsId nao faz isso.
     private User user;

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProductVariationRepository extends JpaRepository<ProductVariation, Long> {
 
-    // busca o produto variado acompanhado do produto ja, por meio do JOIN FETCH.
+    // busca o produto variado acompanhado do produto ja, por meio do JOIN FETCH, evita N + 1 consultas.
     @Query("SELECT variation FROM ProductVariation variation JOIN FETCH variation.product")
     List<ProductVariation> findAllVariationsWithProducts();
 
