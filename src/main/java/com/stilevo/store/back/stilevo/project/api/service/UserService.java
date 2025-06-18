@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("user nao encontrado"));
+                .orElseThrow(() -> new NotFoundException("User not Found"));
     }
 
     @Transactional
@@ -56,24 +56,20 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public User updateUser(Long id, User newUser) {
-        try {
-            User user = userRepository.getReferenceById(id); // encontra o usuario que devemos setar os atributos.
+        User user = getReferenceById(id); // encontra o usuario que devemos setar os atributos.
 
-            user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-            user.setEndereco(newUser.getEndereco());
-            user.setEmail(newUser.getEmail());
-            user.setName(newUser.getName());
-            user.setRole(newUser.getRole());
+        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        user.setEndereco(newUser.getEndereco());
+        user.setEmail(newUser.getEmail());
+        user.setName(newUser.getName());
+        user.setRole(newUser.getRole());
 
-            return userRepository.save(user);
-        } catch (EntityNotFoundException exception) {
-            throw new NotFoundException("user nao encontrado");
-        }
+        return userRepository.save(user);
     }
 
     @Transactional
     public User delete(Long id) {
-        User user = findById(id);
+        User user = getReferenceById(id);
 
         userRepository.delete(user);
 
@@ -82,25 +78,21 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public User parcialUpdateUser(Long id, UserPatchRequestDTO userPatch) {
-        try {
-            User user = userRepository.getReferenceById(id);
+        User user = getReferenceById(id);
 
-            if (!passwordEncoder.matches(userPatch.getPassword(), user.getPassword()))
-                // primeiro parametro usa a senha nao criptografada e o segundo usa a senha criptografada
-                throw new InvalidPasswordException("user send an invalid password, to change data");
+        if (!passwordEncoder.matches(userPatch.getPassword(), user.getPassword()))
+            // primeiro parametro usa a senha nao criptografada e o segundo usa a senha criptografada
+            throw new InvalidPasswordException("user send an invalid password, to change data");
 
-            if (userPatch.getName() != null) {
-                user.setName(userPatch.getName());
-            }
-
-            if (userPatch.getEndereco() != null) {
-                user.setEndereco(enderecoRequestToEntity(userPatch.getEndereco()));
-            }
-
-            return userRepository.save(user);
-        } catch (EntityNotFoundException exception) {
-            throw new NotFoundException("user nao encontrado");
+        if (userPatch.getName() != null) {
+            user.setName(userPatch.getName());
         }
+
+        if (userPatch.getEndereco() != null) {
+            user.setEndereco(enderecoRequestToEntity(userPatch.getEndereco()));
+        }
+
+        return userRepository.save(user);
     }
 
 
@@ -124,6 +116,15 @@ public class UserService implements UserDetailsService {
         endereco.setPontoReferencia( enderecoRequestDTO.getPontoReferencia() );
 
         return endereco;
+    }
+
+    @Transactional(readOnly = true)
+    private User getReferenceById(Long id) {
+        try {
+            return userRepository.getReferenceById(id);
+        } catch (EntityNotFoundException exception) {
+            throw new NotFoundException("User not Found");
+        }
     }
 
 }
