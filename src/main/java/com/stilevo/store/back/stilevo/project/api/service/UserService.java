@@ -10,6 +10,7 @@ import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -55,7 +56,7 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public User updateUser(Long id, User newUser) {
+    public User updateUser(Long id, User newUser) throws NotFoundException {
         User user = getReferenceById(id); // encontra o usuario que devemos setar os atributos.
 
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
@@ -68,7 +69,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User delete(Long id) {
+    public User delete(Long id) throws NotFoundException {
         User user = getReferenceById(id);
 
         userRepository.delete(user);
@@ -77,7 +78,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User parcialUpdateUser(Long id, UserPatchRequestDTO userPatch) {
+    public User parcialUpdateUser(Long id, UserPatchRequestDTO userPatch) throws NotFoundException {
         User user = getReferenceById(id);
 
         if (!passwordEncoder.matches(userPatch.getPassword(), user.getPassword()))
