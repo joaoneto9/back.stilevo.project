@@ -98,8 +98,12 @@ public class UserService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String email) {
+        try {
+            return userRepository.findByEmail(email);
+        } catch (UsernameNotFoundException exception) {
+            throw new NotFoundException("User com esse email nao encontrado");
+        }
     }
 
 
