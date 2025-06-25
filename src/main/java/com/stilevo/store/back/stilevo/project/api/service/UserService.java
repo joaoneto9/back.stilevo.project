@@ -2,6 +2,7 @@ package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserPatchRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.entity.Cart;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.embeddable.Endereco;
 import com.stilevo.store.back.stilevo.project.api.exception.ConflictException;
@@ -50,6 +51,11 @@ public class UserService implements UserDetailsService {
             throw new ConflictException("email ja existente!");
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        Cart cart = new Cart();
+
+        cart.setUser(user);
+        user.setCart(cart);
 
         return userRepository.save(user); // salva no banco
     }

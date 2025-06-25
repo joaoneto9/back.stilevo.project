@@ -53,6 +53,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                                 .requestMatchers(HttpMethod.PUT, "/api/products/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN") // isso quer dizer que apensas os usuarios com role 'admin' estao autorizados para dar um POST com o endpoint '/product/save'
                                 .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/users/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/users/{id}").hasRole("ADMIN")
                                 .anyRequest().authenticated() // isso quer dizer que qualquer outra requisicao que for feita precisa de autenticacao
                 )

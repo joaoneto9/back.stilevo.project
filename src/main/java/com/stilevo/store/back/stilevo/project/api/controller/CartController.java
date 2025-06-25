@@ -14,16 +14,14 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
-    private final CartMapper cartMapper;
 
-    public CartController(CartService cartService, CartMapper cartMapper) {
+    public CartController(CartService cartService) {
         this.cartService = cartService;
-        this.cartMapper = cartMapper;
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CartResponseDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.findById(id)));
+        return ResponseEntity.ok(cartService.findById(id));
     }
 
     @PostMapping(value = "/{id}/product")
@@ -31,7 +29,7 @@ public class CartController {
             @PathVariable Long id,
             @RequestBody @Valid AddToCartRequestDTO addToCartRequestDTO
     ) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.addProductToCart(id, addToCartRequestDTO))); // quero que retorne apenas o CarItem, que mudou
+        return ResponseEntity.ok(cartService.addProductToCart(id, addToCartRequestDTO)); // quero que retorne apenas o CarItem, que mudou
     }
 
     @PatchMapping(value = "/{id}/product/{cartItemId}/decrease")
@@ -39,7 +37,7 @@ public class CartController {
             @PathVariable Long id,
             @PathVariable Long cartItemId
     ) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.decreaseProduct(id, cartItemId)));
+        return ResponseEntity.ok(cartService.decreaseProduct(id, cartItemId));
     }
 
     @PatchMapping(value = "/{id}/product/{cartItemId}/increase")
@@ -47,7 +45,7 @@ public class CartController {
             @PathVariable Long id,
             @PathVariable Long cartItemId
     ) {
-        return ResponseEntity.ok(cartMapper.toResponse(cartService.increaseProduct(id, cartItemId)));
+        return ResponseEntity.ok(cartService.increaseProduct(id, cartItemId));
     }
 
 

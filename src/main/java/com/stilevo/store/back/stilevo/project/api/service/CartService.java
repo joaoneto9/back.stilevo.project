@@ -1,11 +1,14 @@
 package com.stilevo.store.back.stilevo.project.api.service;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.AddToCartRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.response.CartItemResponseDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.response.CartResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.ProductVariation;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.Cart;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.CartItem;
 import com.stilevo.store.back.stilevo.project.api.domain.repository.CartRepository;
+import com.stilevo.store.back.stilevo.project.api.mapper.CartMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,21 +17,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class CartService {
 
     private final CartRepository cartRepository;
+    private final CartMapper cartMapper;
     private final ProductVariationService productVariationService;
 
-    public CartService(CartRepository cartRepository, ProductVariationService productVariationService) {
+    public CartService(CartRepository cartRepository, CartMapper cartMapper, ProductVariationService productVariationService) {
         this.cartRepository = cartRepository;
+        this.cartMapper = cartMapper;
         this.productVariationService = productVariationService;
     }
 
     @Transactional(readOnly = true)
-    public Cart findById(Long id) {
-        return cartRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado"));
+    public CartResponseDTO findById(Long id) {
+        return cartMapper.toResponse(cartRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado")));
     }
 
     @Transactional
-    public CartItem addProductToCart(Long id, AddToCartRequestDTO addToCartRequestDTO) {
+    public CartItemResponseDTO addProductToCart(Long id, AddToCartRequestDTO addToCartRequestDTO) {
         try {
             Cart cart = cartRepository.getReferenceById(id);
 
@@ -45,12 +50,12 @@ public class CartService {
             if (cartItem.getId() != null) {
                 cartItem.addQuantity();
                 cartRepository.save(cart);
-                return cartItem;
+                return cartMapper.toResponse(cartItem);
             }
 
             cart.getCartItems().add(cartItem);
 
-            return cartRepository.save(cart).getCartItems().get(cart.getCartItems().size() - 1); // garante que e o ultimo adicionado
+            return cartMapper.toResponse(cartRepository.save(cart).getCartItems().get(cart.getCartItems().size() - 1)); // garante que e o ultimo adicionado
         } catch (EntityNotFoundException exception) {
             throw new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado");
         }
@@ -80,7 +85,7 @@ public class CartService {
     }
 
     @Transactional
-    public CartItem decreaseProduct(Long id, Long cartItemId) {
+    public CartItemResponseDTO decreaseProduct(Long id, Long cartItemId) {
         try {
             Cart cart = cartRepository.getReferenceById(id);
 
@@ -94,14 +99,14 @@ public class CartService {
 
             cartRepository.save(cart); // atualiza
 
-            return cartItem;
+            return cartMapper.toResponse(cartItem);
         } catch (EntityNotFoundException exception) {
             throw new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado");
         }
     }
 
     @Transactional
-    public CartItem increaseProduct(Long id, Long cartItemId) {
+    public CartItemResponseDTO increaseProduct(Long id, Long cartItemId) {
         try {
             Cart cart = cartRepository.getReferenceById(id);
 
@@ -111,7 +116,7 @@ public class CartService {
 
             cartRepository.save(cart); // atualiza
 
-            return cartItem;
+            return cartMapper.toResponse(cartItem);
         } catch (EntityNotFoundException exception) {
             throw new NotFoundException("carrinho do cliente com id:" + id + " nao encontrado");
         }
@@ -119,6 +124,7 @@ public class CartService {
     }
 
     protected CartItem findCartItemAtUserCart(Long userId, Long cartItemId) {
-        return cartItemFilter(findById(userId), cartItemId);
+        return cartItemFilter(cartRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("carrinho do cliente com id:" + userId + " nao encontrado")), cartItemId);
     }
 }
