@@ -15,16 +15,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Service
 public class AuthService {
 
+    private final UserMapper userMapper;
+
     private final TokenService tokenService;
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthService(TokenService tokenService, AuthenticationManager authenticationManager) {
+    public AuthService(UserMapper userMapper, TokenService tokenService, AuthenticationManager authenticationManager) {
+        this.userMapper = userMapper;
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
     }
 
-    public LoginResponseDTO login(@RequestBody @Valid AuthenticationUserRequestDTO userLogin, UserMapper userMapper) {
+    public LoginResponseDTO login(@RequestBody @Valid AuthenticationUserRequestDTO userLogin) {
         try {
             UsernamePasswordAuthenticationToken usernamePassword =
                     new UsernamePasswordAuthenticationToken(userLogin.email(), userLogin.password()); // vem do Spring Security

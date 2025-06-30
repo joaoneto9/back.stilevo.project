@@ -37,7 +37,7 @@ public class CartService {
         try {
             Cart cart = cartRepository.getReferenceById(id);
 
-            ProductVariation productVariation = productVariationService.findById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
+            ProductVariation productVariation = productVariationService.getEntityById(addToCartRequestDTO.getProductVariationId()); // acha pelo id
 
             CartItem cartItem = cart.getCartItems()
                     .stream()

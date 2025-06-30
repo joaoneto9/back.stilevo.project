@@ -3,7 +3,6 @@ package com.stilevo.store.back.stilevo.project.api.controller;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserPatchRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
-import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import com.stilevo.store.back.stilevo.project.api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -17,29 +16,25 @@ import java.util.List;
 @RequestMapping(value = "api/users")
 public class UserController {
 
-    private final UserMapper userMapper;
-
     private final UserService userService;
 
-    public UserController(UserMapper userMapper, UserService userService) {
-        this.userMapper = userMapper;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> findAll() {
-        return ResponseEntity.ok(userService.findAll().stream()
-                .map(userMapper::toResponse).toList());
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(userMapper.toResponse(userService.findById(id)));
+        return ResponseEntity.ok(userService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-        UserResponseDTO responseDTO = userMapper.toResponse(userService.save(userMapper.toEntity(userRequestDTO)));
+        UserResponseDTO responseDTO = userService.save(userRequestDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}")
                 .buildAndExpand(responseDTO.getId()).toUri();
@@ -53,12 +48,12 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody @Valid UserRequestDTO userRequestDTO
     ) {
-        return ResponseEntity.ok(userMapper.toResponse(userService.updateUser(id, userMapper.toEntity(userRequestDTO))));
+        return ResponseEntity.ok(userService.updateUser(id, userRequestDTO));
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<UserResponseDTO> deleteUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userMapper.toResponse(userService.delete(id)));
+        return ResponseEntity.ok(userService.delete(id));
     }
 
     /*
@@ -70,7 +65,7 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody @Valid UserPatchRequestDTO userPatch
             ) {
-        return ResponseEntity.ok(userMapper.toResponse(userService.parcialUpdateUser(id, userPatch)));
+        return ResponseEntity.ok(userService.parcialUpdateUser(id, userPatch));
 
     }
 

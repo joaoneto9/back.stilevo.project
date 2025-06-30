@@ -16,30 +16,25 @@ import java.util.List;
 @RequestMapping(value = "api/products")
 public class ProductController {
 
-    private final ProductMapper productMapper;
-
     private final ProductService productService;
 
-    public ProductController(ProductMapper productMapper, ProductService productService) {
-        this.productMapper = productMapper;
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> findAll() {
-        return ResponseEntity.ok(productService.findAll()
-                .stream()
-                .map(productMapper::toResponse).toList());
+        return ResponseEntity.ok(productService.findAll());
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProductResponseDTO> findById( @PathVariable Long id) {
-        return ResponseEntity.ok(productMapper.toResponse(productService.findById(id)));
+        return ResponseEntity.ok(productService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<ProductResponseDTO> save(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
-        ProductResponseDTO responseDTO = productMapper.toResponse(productService.save(productMapper.toEntity(productRequestDTO)));
+        ProductResponseDTO responseDTO = productService.save(productRequestDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(responseDTO.getId()).toUri();
@@ -49,7 +44,7 @@ public class ProductController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<ProductResponseDTO> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(productMapper.toResponse(productService.delete(id)));
+        return ResponseEntity.ok(productService.delete(id));
     }
 
     @PutMapping(value = "/{id}")
@@ -57,7 +52,7 @@ public class ProductController {
             @PathVariable Long id,
             @RequestBody ProductRequestDTO productRequestDTO
     ){
-        return ResponseEntity.ok(productMapper.toResponse(productService.update(id, productRequestDTO)));
+        return ResponseEntity.ok(productService.update(id, productRequestDTO));
     }
 
 }

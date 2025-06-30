@@ -2,11 +2,14 @@ package com.stilevo.store.back.stilevo.project.test.services;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.EnderecoRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserPatchRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.request.UserRequestDTO;
+import com.stilevo.store.back.stilevo.project.api.domain.dto.response.UserResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
 import com.stilevo.store.back.stilevo.project.api.domain.enums.UserRole;
 import com.stilevo.store.back.stilevo.project.api.exception.ConflictException;
 import com.stilevo.store.back.stilevo.project.api.exception.InvalidPasswordException;
 import com.stilevo.store.back.stilevo.project.api.exception.NotFoundException;
+import com.stilevo.store.back.stilevo.project.api.mapper.UserMapper;
 import com.stilevo.store.back.stilevo.project.api.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +25,19 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Test
     void saveUserTest() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
 
         user.setName("joao neto");
         user.setEmail("joaoneto@gmail.com");
         user.setPassword("senha");
         user.setRole(UserRole.USER); // usuario normal
 
-        User userSaved = userService.save(user);
+        UserResponseDTO userSaved = userService.save(user);
 
         assertNotNull(userSaved.getId()); // o id nao e null mais
         assertEquals(userSaved.getEmail(), user.getEmail()); // o email e o mesmo
@@ -39,7 +45,7 @@ public class UserServiceTest {
 
     @Test
     void saveUserButEmailExistsTest() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
 
         user.setName("joao neto");
         user.setEmail("joaoneto@gmail.com");
@@ -53,14 +59,14 @@ public class UserServiceTest {
 
     @Test
     void findUserByIdTest() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
 
         user.setName("joao neto");
         user.setEmail("joaoneto@gmail.com");
         user.setPassword("senha");
         user.setRole(UserRole.USER); // usuario normal
 
-        User userSaved = userService.save(user);
+        UserResponseDTO userSaved = userService.save(user);
 
         assertEquals(userService.findById(userSaved.getId()).getEmail(), user.getEmail()); // existe User
     }
@@ -72,23 +78,27 @@ public class UserServiceTest {
 
     @Test
     void updateUserTest() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
 
         user.setName("joao neto");
         user.setEmail("joaoneto@gmail.com");
         user.setPassword("senha");
         user.setRole(UserRole.USER); // usuario normal
 
-        User userSaved = userService.save(user); // salva no banco
+        UserResponseDTO userSaved = userService.save(user); // salva no banco
 
         assertEquals(userSaved.getName(), user.getName()); // teste so pra ter certeza que salvoi no banco
 
         // vamos atualizar agora
 
-        userSaved.setName("novo nome");
-        userSaved.setEmail("emailnovo@gmail.com");
+        UserRequestDTO userUpdate = new UserRequestDTO();
 
-        User userUpdated = userService.updateUser(userSaved.getId(), userSaved); // atualiza o user
+        userUpdate.setName("novo nome");
+        userUpdate.setEmail("emailnovo@gmail.com");
+        userUpdate.setPassword(user.getPassword());
+        userUpdate.setRole(user.getRole());
+
+        UserResponseDTO userUpdated = userService.updateUser(userSaved.getId(), userUpdate); // atualiza o user
 
         assertEquals(userUpdated.getId(), userSaved.getId()); // precisam ter o mesmo id para sinalizar que trocou o mesmo user
         assertEquals(userUpdated.getName(), "novo nome"); // teste da mudanca do nome
@@ -97,16 +107,16 @@ public class UserServiceTest {
 
     @Test
     void deleteUserTest() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
 
         user.setName("joao neto");
         user.setEmail("joaoneto@gmail.com");
         user.setPassword("senha");
         user.setRole(UserRole.USER); // usuario normal
 
-        User userSaved = userService.save(user);
+        UserResponseDTO userSaved = userService.save(user);
 
-        User userDeleted = userService.delete(userSaved.getId()); // deleta o user que acabou de ser salvo
+        UserResponseDTO userDeleted = userService.delete(userSaved.getId()); // deleta o user que acabou de ser salvo
 
         assertEquals(userSaved, userDeleted);
         // deve ser o mesmo user que foi salvo
@@ -116,14 +126,14 @@ public class UserServiceTest {
 
     @Test
     void parcialUpdateErrorPasswordUserTest() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
 
         user.setName("joao neto");
         user.setEmail("joaoneto@gmail.com");
         user.setPassword("senha");
         user.setRole(UserRole.USER); // usuario normal
 
-        User userSaved = userService.save(user);
+        UserResponseDTO userSaved = userService.save(user);
 
         UserPatchRequestDTO userPatch = new UserPatchRequestDTO();
 
@@ -136,14 +146,14 @@ public class UserServiceTest {
 
     @Test
     void parcialUpdateUserTest() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
 
         user.setName("joao neto");
         user.setEmail("joaoneto@gmail.com");
         user.setPassword("senha");
         user.setRole(UserRole.USER); // usuario normal
 
-        User userSaved = userService.save(user); // lembrra que ta com a sneha criptografada
+        UserResponseDTO userSaved = userService.save(user); // lembrra que ta com a sneha criptografada
 
         UserPatchRequestDTO userPatch = new UserPatchRequestDTO();
 
@@ -163,13 +173,11 @@ public class UserServiceTest {
         userPatch.setEndereco(endereco); // endereco nao null, tem que alterar
 
         try {
-            User userUpdated = userService.parcialUpdateUser(userSaved.getId(), userPatch);
+            UserResponseDTO userUpdated = userService.parcialUpdateUser(userSaved.getId(), userPatch);
             assertEquals(userUpdated.getName(), userPatch.getName());
             // isso significa que alterou o nome
-            assertEquals(userSaved.getEndereco(), userUpdated.getEndereco());
-            // como o UserPatch e null, nao devia alterar o endereco, manetndo o endereco anterior
-            assertEquals(userUpdated.getEndereco().getCep(), endereco.getCep());
-            // isso significa quemudou e e o endereco que foi demandado
+            assertEquals(userService.findById(userSaved.getId()).getEndereco().getCep(), userUpdated.getEndereco().getCep());
+            // verifica que mudou o endereco do user com id especificado
         } catch (InvalidPasswordException e) {
             System.out.println("deu erro, user mandou a senha errada");
             assertTrue(false); // demonstrar que deu errado
@@ -181,14 +189,14 @@ public class UserServiceTest {
 
     @Test
     void parcialUpdateUserNullTest() {
-        User user = new User();
+        UserRequestDTO user = new UserRequestDTO();
 
         user.setName("joao neto");
         user.setEmail("joaoneto@gmail.com");
         user.setPassword("senha");
         user.setRole(UserRole.USER); // usuario normal
 
-        User userSaved = userService.save(user);
+        UserResponseDTO userSaved = userService.save(user);
 
         UserPatchRequestDTO userPatch = new UserPatchRequestDTO();
 
@@ -197,7 +205,7 @@ public class UserServiceTest {
         userPatch.setEndereco(null); // endereco null, nao altera
 
         try {
-            User userUpdated = userService.parcialUpdateUser(userSaved.getId(), userPatch);
+            UserResponseDTO userUpdated = userService.parcialUpdateUser(userSaved.getId(), userPatch);
             assertEquals(userUpdated.getName(), userSaved.getName());
             // isso significa que nao alterou o nome, porque era null
             assertEquals(userSaved.getEndereco(), userUpdated.getEndereco());

@@ -2,7 +2,6 @@ package com.stilevo.store.back.stilevo.project.api.controller;
 
 import com.stilevo.store.back.stilevo.project.api.domain.dto.request.ProductVariationRequestDTO;
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.ProductVariationResponseDTO;
-import com.stilevo.store.back.stilevo.project.api.mapper.ProductVariationMapper;
 import com.stilevo.store.back.stilevo.project.api.service.ProductVariationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +15,8 @@ import java.util.List;
 @RequestMapping(value = "api/products/variation")
 public class ProductVariationController {
 
-    private final ProductVariationMapper mapper;
-
     private final ProductVariationService productVariationService;
-
-    public ProductVariationController(ProductVariationMapper mapper, ProductVariationService productVariationService) {
-        this.mapper = mapper;
+    public ProductVariationController(ProductVariationService productVariationService) {
         this.productVariationService = productVariationService;
     }
 
@@ -30,23 +25,19 @@ public class ProductVariationController {
             @RequestParam(required = false, defaultValue = "") String name
     ) {
         if (!name.isEmpty())
-            return ResponseEntity.ok(productVariationService.findAllBySimilarName(name).stream()
-                    .map(mapper::toResponse)
-                    .toList());
+            return ResponseEntity.ok(productVariationService.findAllBySimilarName(name));
 
-        return ResponseEntity.ok(productVariationService.findAll().stream()
-                .map(mapper::toResponse)
-                .toList());
+        return ResponseEntity.ok(productVariationService.findAll());
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProductVariationResponseDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(mapper.toResponse(productVariationService.findById(id)));
+        return ResponseEntity.ok(productVariationService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<ProductVariationResponseDTO> save(@RequestBody @Valid ProductVariationRequestDTO productVariationRequestDTO) {
-        ProductVariationResponseDTO responseDTO = mapper.toResponse(productVariationService.save(productVariationRequestDTO, mapper));
+        ProductVariationResponseDTO responseDTO = productVariationService.save(productVariationRequestDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(responseDTO.getId()).toUri();
@@ -57,7 +48,7 @@ public class ProductVariationController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<ProductVariationResponseDTO> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(mapper.toResponse(productVariationService.delete(id)));
+        return ResponseEntity.ok(productVariationService.delete(id));
     }
 
     @PutMapping(value = "/{id}")
@@ -65,7 +56,7 @@ public class ProductVariationController {
             @PathVariable Long id,
             @RequestBody @Valid ProductVariationRequestDTO newProduct
     ) {
-        return ResponseEntity.ok(mapper.toResponse(productVariationService.update(id, newProduct)));
+        return ResponseEntity.ok(productVariationService.update(id, newProduct));
     }
 
 
