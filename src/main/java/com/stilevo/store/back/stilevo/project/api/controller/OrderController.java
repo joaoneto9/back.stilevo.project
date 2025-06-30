@@ -20,25 +20,20 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    private final OrderMapper orderMapper;
-
     public OrderController(OrderService orderService, OrderMapper orderMapper) {
         this.orderService = orderService;
-        this.orderMapper = orderMapper;
     }
 
     @GetMapping(value = "/{userId}")
     public ResponseEntity<List<OrderResponseDTO>> getAllOrdersByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(orderService.getAllByUserId(userId).stream()
-                .map(orderMapper::toResponse)
-                .toList());
+        return ResponseEntity.ok(orderService.getAllByUserId(userId));
     }
 
     @PostMapping
     public ResponseEntity<OrderResponseDTO> save(
             @RequestBody @Valid OrderRequestDTO orderRequestDTO
     ) {
-        OrderResponseDTO responseDTO = orderMapper.toResponse(orderService.save(orderRequestDTO));
+        OrderResponseDTO responseDTO = orderService.save(orderRequestDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(responseDTO.getId()).toUri();
@@ -50,7 +45,7 @@ public class OrderController {
     public ResponseEntity<OrderResponseDTO> delete(
             @PathVariable Long orderId
     ) {
-        return ResponseEntity.ok(orderMapper.toResponse(orderService.delete(orderId)));
+        return ResponseEntity.ok((orderService.delete(orderId)));
     }
 
     @PostMapping(value = "/{orderId}")
@@ -58,7 +53,7 @@ public class OrderController {
             @PathVariable Long orderId,
             @RequestBody @Valid OrderItemRequestDTO orderItemRequestDTO
     ) {
-        return ResponseEntity.ok(orderMapper.toResponse(orderService.putOrderItem(orderId, orderItemRequestDTO)));
+        return ResponseEntity.ok(orderService.putOrderItem(orderId, orderItemRequestDTO));
     }
 
 }
