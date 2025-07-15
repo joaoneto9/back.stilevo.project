@@ -29,7 +29,8 @@ public class SecurityFilter extends OncePerRequestFilter { // usa-se a cada requ
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = recoverToken(request);
+        String token = recoverToken(request);
+
         if (token == null) { // isso significa que nao precisa de token... assim ele passa para o filtro normal, o que indica que roda os "permitAll" normalmente
             filterChain.doFilter(request, response); // se nao tiver token, chama o proximo filtro na config
             return; // isso evita que erealiza a verificacao, pois o token e null

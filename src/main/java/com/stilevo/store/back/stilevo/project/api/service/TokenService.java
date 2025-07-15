@@ -5,6 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.stilevo.store.back.stilevo.project.api.domain.entity.User;
+import com.stilevo.store.back.stilevo.project.api.exception.GeneratingTokenException;
+import com.stilevo.store.back.stilevo.project.api.exception.InvalidAuthenticationUserException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +30,7 @@ public class TokenService {
                     .sign(algorithm); // realiza a assinatura
 
         } catch (JWTCreationException e) { //excessao quando ano conseguir criar o token
-            throw new RuntimeException("ERROR GENERATING TOKEN:", e);
+            throw new GeneratingTokenException("ERROR GENERATING TOKEN:");
         }
     }
 
@@ -41,7 +43,7 @@ public class TokenService {
                     .verify(token)//verifica o token
                     .getSubject(); // pegou o subject que foi criado ao criar o token
         } catch (JWTVerificationException e) {
-            throw new RuntimeException("ERRO AO VALIDAR O TOKEN", e);
+            throw new InvalidAuthenticationUserException("ERRO AO VALIDAR O TOKEN");
 
         }
     }
