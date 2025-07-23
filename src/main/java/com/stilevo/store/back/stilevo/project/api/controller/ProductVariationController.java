@@ -4,6 +4,8 @@ import com.stilevo.store.back.stilevo.project.api.domain.dto.request.ProductVari
 import com.stilevo.store.back.stilevo.project.api.domain.dto.response.ProductVariationResponseDTO;
 import com.stilevo.store.back.stilevo.project.api.service.ProductVariationService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,18 +18,14 @@ import java.util.List;
 public class ProductVariationController {
 
     private final ProductVariationService productVariationService;
+
     public ProductVariationController(ProductVariationService productVariationService) {
         this.productVariationService = productVariationService;
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductVariationResponseDTO>> findAll(
-            @RequestParam(required = false, defaultValue = "") String name
-    ) {
-        if (!name.isEmpty())
-            return ResponseEntity.ok(productVariationService.findAllBySimilarName(name));
-
-        return ResponseEntity.ok(productVariationService.findAll());
+    public ResponseEntity<Page<ProductVariationResponseDTO>> findAll ( Pageable pageable ) {
+        return ResponseEntity.ok(productVariationService.findAll(pageable));
     }
 
     @GetMapping(value = "/{id}")
