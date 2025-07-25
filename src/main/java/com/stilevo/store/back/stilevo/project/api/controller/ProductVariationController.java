@@ -5,6 +5,7 @@ import com.stilevo.store.back.stilevo.project.api.domain.dto.response.ProductVar
 import com.stilevo.store.back.stilevo.project.api.service.ProductVariationService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,14 @@ public class ProductVariationController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductVariationResponseDTO>> findAll ( Pageable pageable ) {
-        return ResponseEntity.ok(productVariationService.findAll(pageable));
+    public ResponseEntity<Page<ProductVariationResponseDTO>> findAll(
+            Pageable pageable,
+            @RequestParam(required = false, defaultValue = "") String name
+    ) {
+        if (!name.isEmpty())
+            return ResponseEntity.ok(productVariationService.findAllBySimilarName(pageable, name));
+
+        return ResponseEntity.ok(productVariationService.findAll(pageable, "page" + pageable.getPageNumber()));
     }
 
     @GetMapping(value = "/{id}")
